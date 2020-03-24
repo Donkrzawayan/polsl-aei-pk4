@@ -73,9 +73,7 @@ int main()
 	catch (TDzielPrzezZero &e) {
 		e.what();
 	}
-	catch (...) {
-
-	}
+	catch (...) {}
 
 	std::cout << "\n\n";
 
@@ -111,6 +109,8 @@ int main()
 			}
 			catch (std::bad_cast &e) {}
 		}
+		else
+			std::cout << "Nie jest zwierzeciem" << std::endl;
 	}
 
 	std::cout << "\n\n";
