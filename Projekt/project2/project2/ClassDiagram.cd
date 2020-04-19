@@ -1,22 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Commodity">
+  <Class Name="Item">
     <Position X="1.25" Y="0.75" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAABAgAKAAAAAAAAAAAAAAAAAAAEAACAAAAAAAAAAAA=</HashCode>
+      <HashCode>BABAAMIGAAIAAEAABCQAAQICAAAEAGCAAQAAAAAAAAA=</HashCode>
       <FileName>commodity.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataBase">
-    <Position X="7.75" Y="0.75" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
+    <Position X="8" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAACAAAgAAABCAAAAAAAAAAAIAAAQEIAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAABAgAAEBAgAIQIQAAEAAoAAAQAAIAAAAAA=</HashCode>
       <FileName>dataBase.hpp</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -24,39 +18,40 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Invoice">
-    <Position X="3.25" Y="2.5" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
+    <Position X="3.25" Y="5.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAQAQA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAACABCAAAAAAAAAAQA=</HashCode>
       <FileName>invoice.hpp</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="billTo" />
+      <Field Name="contractor" />
     </ShowAsAssociation>
   </Class>
   <Class Name="Party">
-    <Position X="5.5" Y="0.75" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
+    <Position X="5.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEAAAAAAAAAAAAIAACAAAAAAAIIEAAAAAAAAAAAABAI=</HashCode>
+      <HashCode>AEQAAAAAAAAAAAIAACAAAAIAAIIEAAAAAQAAAAAAAAI=</HashCode>
       <FileName>party.hpp</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Receipt">
     <Position X="3.25" Y="0.75" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
-    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAIAAAAAQ=</HashCode>
+      <HashCode>AAAABAAAAAQAiABAAEgAMAAAAAACACAAACACAwAAAAQ=</HashCode>
       <FileName>receipt.hpp</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="seller" />
+      <Field Name="owner" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Interface">
+    <Position X="5.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAQAAAQAAAAAADAIAAAAAAAEAAAAAAAAAACAAA=</HashCode>
+      <FileName>interface.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="db" />
     </ShowAsAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />

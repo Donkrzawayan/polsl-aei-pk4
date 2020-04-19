@@ -1,10 +1,5 @@
-
 #include "party.hpp"
-
-
-Party::Party()
-{
-}
+#include <iostream>
 
 std::istream & Party::read(std::istream & is)
 {
@@ -26,4 +21,75 @@ std::istream & Party::read(std::istream & is)
 	is.read(reinterpret_cast<char *>(&town[0]), size * sizeof(town[0]));
 
 	return is;
+}
+
+std::ostream & Party::write(std::ostream & os) const
+{
+	size_t size = name.length() + 1U;
+	os.write(reinterpret_cast<const char *>(&size), sizeof(size))
+		.write(name.c_str(), size * sizeof(name[0]));
+	size = NIP.length() + 1U;
+	os.write(reinterpret_cast<const char *>(&size), sizeof(size))
+		.write(NIP.c_str(), size * sizeof(NIP[0]));
+	size = address.length() + 1U;
+	os.write(reinterpret_cast<const char *>(&size), sizeof(size))
+		.write(address.c_str(), size * sizeof(address[0]));
+	size = postcode.length() + 1U;
+	os.write(reinterpret_cast<const char *>(&size), sizeof(size))
+		.write(postcode.c_str(), size * sizeof(postcode[0]));
+	size = town.length() + 1U;
+	os.write(reinterpret_cast<const char *>(&size), sizeof(size))
+		.write(town.c_str(), size * sizeof(town[0]));
+
+	return os;
+}
+
+void Party::writeXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement) const
+{
+	using namespace tinyxml2;
+
+	XMLElement * pElement;
+
+	pElement = doc.NewElement("Nazwa");
+	pElement->SetText(name.c_str());
+	pPrevElement->InsertEndChild(pElement);
+
+	pElement = doc.NewElement("NIP");
+	pElement->SetText(NIP.c_str());
+	pPrevElement->InsertEndChild(pElement);
+
+	pElement = doc.NewElement("Adres");
+	pElement->SetText(address.c_str());
+	pPrevElement->InsertEndChild(pElement);
+
+	pElement = doc.NewElement("Kod_pocz.");
+	pElement->SetText(postcode.c_str());
+	pPrevElement->InsertEndChild(pElement);
+
+	pElement = doc.NewElement("Miasto");
+	pElement->SetText(town.c_str());
+	pPrevElement->InsertEndChild(pElement);
+}
+
+void Party::createParty()
+{
+	std::cout << "Nazwa: ";
+	std::getline(std::cin, name, '\n');
+	std::cout << "NIP: ";
+	std::getline(std::cin, NIP, '\n');
+	std::cout << "Adres: ";
+	std::getline(std::cin, address, '\n');
+	std::cout << "Kod pocz.: ";
+	std::getline(std::cin, postcode, '\n');
+	std::cout << "Miasto: ";
+	std::getline(std::cin, town, '\n');
+}
+
+std::ostream & operator<<(std::ostream & os, const Party & p)
+{
+	return os << "Nazwa: " << p.name << "\n"
+		<< "NIP: " << p.NIP << "\n"
+		<< "Adres: " << p.address << "\n"
+		<< "Kod pocz.: " << p.postcode << "\n"
+		<< "Miasto: " << p.town << "\n";
 }

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Faktura>
+    <Informacje_o_dokumencie>
+        <Nr>FV20204131</Nr>
+        <Data_wystawienia>2020.4.13</Data_wystawienia>
+        <Godzina>20:31</Godzina>
+    </Informacje_o_dokumencie>
+    <Dane_sprzedawcy>
+        <Nazwa>Firma komputerowa "Virtual Net"</Nazwa>
+        <NIP>645-214-04-58</NIP>
+        <Adres>Fiolkow</Adres>
+        <Kod_pocz.>42-606</Kod_pocz.>
+        <Miasto>Tarnowskie Gory</Miasto>
+    </Dane_sprzedawcy>
+    <Dane_kupujacego>
+        <Nazwa>panda</Nazwa>
+        <NIP>242</NIP>
+        <Adres>aleja kwiatow</Adres>
+        <Kod_pocz.>42-606</Kod_pocz.>
+        <Miasto>Tarnowskie Gory ZABIERZCIE GO</Miasto>
+    </Dane_kupujacego>
+    <Pozycje_na_paragonie>
+        <Pozycja>
+            <Nazwa>Kebab cienki</Nazwa>
+            <Ilosc>2137</Ilosc>
+            <VAT_proc.>8</VAT_proc.>
+            <Cena_brutto>13.00</Cena_brutto>
+            <Cena_netto>12.04</Cena_netto>
+        </Pozycja>
+      <Pozycja>
+        <Nazwa>Kebab cienki XXL</Nazwa>
+        <Ilosc>3</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>17.00</Cena_brutto>
+        <Cena_netto>15.74</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Frytki</Nazwa>
+        <Ilosc>50</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>6.00</Cena_brutto>
+        <Cena_netto>5.56</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Kebab gruby</Nazwa>
+        <Ilosc>50000</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>13.00</Cena_brutto>
+        <Cena_netto>12.04</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Kebab gruby XXL</Nazwa>
+        <Ilosc>3</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>17.00</Cena_brutto>
+        <Cena_netto>15.74</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>King Star Specjał</Nazwa>
+        <Ilosc>1337</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>19.00</Cena_brutto>
+        <Cena_netto>17.59</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>King Star Kebab Specjał XXXL</Nazwa>
+        <Ilosc>15000</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>23.00</Cena_brutto>
+        <Cena_netto>21.30</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Kebab cienki bez surówki</Nazwa>
+        <Ilosc>500</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>15.00</Cena_brutto>
+        <Cena_netto>13.89</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Kebab gruby bez surówki</Nazwa>
+        <Ilosc>13</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>15.00</Cena_brutto>
+        <Cena_netto>13.89</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Talerz z kurczakiem</Nazwa>
+        <Ilosc>78</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>20.00</Cena_brutto>
+        <Cena_netto>18.52</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Talerz z baraniną</Nazwa>
+        <Ilosc>666</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>21.00</Cena_brutto>
+        <Cena_netto>19.44</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Talerz z mięsem mieszanym</Nazwa>
+        <Ilosc>850</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>21.00</Cena_brutto>
+        <Cena_netto>19.44</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Talerz z kurczakiem XXL</Nazwa>
+        <Ilosc>915</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>23.00</Cena_brutto>
+        <Cena_netto>21.30</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Talerz z baraniną XXL</Nazwa>
+        <Ilosc>69</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>24.00</Cena_brutto>
+        <Cena_netto>22.22</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Talerz z mięsem mieszanym XXL</Nazwa>
+        <Ilosc>2</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>24.00</Cena_brutto>
+        <Cena_netto>22.22</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Talerz King Star Specjał</Nazwa>
+        <Ilosc>1</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>28.00</Cena_brutto>
+        <Cena_netto>25.93</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Lunch Box</Nazwa>
+        <Ilosc>3</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>15.00</Cena_brutto>
+        <Cena_netto>13.89</Cena_netto>
+      </Pozycja>
+      <Pozycja>
+        <Nazwa>Lunch Box + napój</Nazwa>
+        <Ilosc>7</Ilosc>
+        <VAT_proc.>8</VAT_proc.>
+        <Cena_brutto>18.00</Cena_brutto>
+        <Cena_netto>16.67</Cena_netto>
+      </Pozycja>
+    </Pozycje_na_paragonie>
+    <Suma>
+        <Suma_PLN>2137</Suma_PLN>
+        <Suma_PTU>2137</Suma_PTU>
+        <Suma_netto>2137</Suma_netto>
+    </Suma>
+</Faktura>
