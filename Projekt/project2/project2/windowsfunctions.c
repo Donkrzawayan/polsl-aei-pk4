@@ -1,7 +1,8 @@
 #include "windowsFunctions.h"
+
+#ifdef _WIN32
 #include <windows.h>
 
-#ifdef _WIN32 //ClearScreen()
 void ClearScreen(void)
 {
 	HANDLE                     hStdOut;
@@ -39,5 +40,7 @@ void ClearScreen(void)
 	SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 #else
+#include <stdio.h>
+
 void  ClearScreen() { printf("\033[H\033[J"); }
 #endif // _WIN32

@@ -5,14 +5,14 @@
 
 void DataBase::readBase(std::ifstream &ifs)
 {
-	//read month and no
+	//read month and invoiceNo
 	int month;
 	ifs.read(reinterpret_cast<char *>(&month), sizeof(month));
-	ifs.read(reinterpret_cast<char *>(&no), sizeof(no));
+	ifs.read(reinterpret_cast<char *>(&invoiceNo), sizeof(invoiceNo));
 
-	//if month has changed reset invoice no
+	//if month has changed reset invoice invoiceNo
 	const time_t t = time(NULL);
-	if (month != localtime(&t)->tm_mon) no = 1U;
+	if (month != localtime(&t)->tm_mon) invoiceNo = 1U;
 		
 	size_t size;
 	ifs.read(reinterpret_cast<char *>(&size), sizeof(size));
@@ -65,11 +65,11 @@ void DataBase::writeBase(std::string dbFileName)
 	else {
 		owner.write(ofs);
 
-		//write month and no
+		//write month and invoiceNo
 		const time_t t = time(NULL);
 		int month = localtime(&t)->tm_mon;
 		ofs.write(reinterpret_cast<const char *>(&month), sizeof(month));
-		ofs.write(reinterpret_cast<const char *>(&no), sizeof(no));
+		ofs.write(reinterpret_cast<const char *>(&invoiceNo), sizeof(invoiceNo));
 
 		const size_t size = stock.size();
 
@@ -110,7 +110,7 @@ bool DataBase::loadFromXMLInvoice(const std::string & docName)
 void DataBase::ShowStock() const
 {
 	constexpr std::streamsize NO_WIDTH = 5;
-	constexpr std::streamsize NAME_WIDTH = 56;
+	constexpr std::streamsize DESCRIPTION_WIDTH = 56;
 	constexpr std::streamsize QTY_WIDTH = 5;
 	constexpr std::streamsize PRICE_WIDTH = 12;
 	constexpr std::streamsize VAT_WIDTH = 4;
@@ -118,7 +118,7 @@ void DataBase::ShowStock() const
 	auto width = std::cout.width(); //remember old value
 
 	std::cout << std::right << std::setw(NO_WIDTH) << "lp. ";
-	std::cout << std::left << std::setw(NAME_WIDTH) << "Nazwa";
+	std::cout << std::left << std::setw(DESCRIPTION_WIDTH) << "Nazwa";
 	std::cout << std::right << std::setw(QTY_WIDTH) << "Ilosc";
 	std::cout << std::right << std::setw(PRICE_WIDTH) << "Cena sprz.";
 	std::cout << std::right << std::setw(VAT_WIDTH) << "VAT";
@@ -126,7 +126,7 @@ void DataBase::ShowStock() const
 
 	for (size_t i = 0; i < stock.size(); ++i) {
 		std::cout << std::right << std::setw(NO_WIDTH - 2) << (i + 1) << ". "; //index for user
-		stock[i].Show(NAME_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
+		stock[i].Show(DESCRIPTION_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
 		std::cout << "\n";
 	}
 

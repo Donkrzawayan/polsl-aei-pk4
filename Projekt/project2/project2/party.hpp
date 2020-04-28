@@ -5,7 +5,7 @@
 
 class Party
 {
-	std::string name, NIP, address, postcode, town;
+	std::string name, NIP, address, postcode, city;
 public:
 	Party() = default;
 

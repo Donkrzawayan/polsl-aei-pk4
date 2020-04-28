@@ -34,7 +34,7 @@ bool Invoice::createDocument() const
 			XMLElement * pInfoElement;
 
 			pInfoElement = doc.NewElement("Nr");
-			pInfoElement->SetText(("FV" + std::move(date()) + std::move(std::to_string(no))).c_str()); //performance FTW
+			pInfoElement->SetText(("FV" + std::move(date()) + std::move(std::to_string(invoiceNo))).c_str()); //performance FTW
 			pElement->InsertEndChild(pInfoElement);
 
 			pInfoElement = doc.NewElement("Data_wystawienia");
@@ -69,6 +69,6 @@ bool Invoice::createDocument() const
 
 	doc.InsertFirstChild(doc.NewDeclaration()); //add <?xml version="1.0" encoding="UTF-8"?>
 
-	XMLError result = doc.SaveFile(("FV" + std::move(date()) + std::move(std::to_string(no)) + ".xml").c_str());
+	XMLError result = doc.SaveFile(("FV" + std::move(date()) + std::move(std::to_string(invoiceNo)) + ".xml").c_str());
 	return result == XML_SUCCESS;
 }

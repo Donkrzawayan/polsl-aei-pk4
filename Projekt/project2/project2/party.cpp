@@ -4,21 +4,26 @@
 std::istream & Party::read(std::istream & is)
 {
 	size_t size;
+
 	is.read(reinterpret_cast<char *>(&size), sizeof(size));
 	name.resize(size);
 	is.read(reinterpret_cast<char *>(&name[0]), size * sizeof(name[0]));
+
 	is.read(reinterpret_cast<char *>(&size), sizeof(size));
 	NIP.resize(size);
 	is.read(reinterpret_cast<char *>(&NIP[0]), size * sizeof(NIP[0]));
+
 	is.read(reinterpret_cast<char *>(&size), sizeof(size));
 	address.resize(size);
 	is.read(reinterpret_cast<char *>(&address[0]), size * sizeof(address[0]));
+
 	is.read(reinterpret_cast<char *>(&size), sizeof(size));
 	postcode.resize(size);
 	is.read(reinterpret_cast<char *>(&postcode[0]), size * sizeof(postcode[0]));
+
 	is.read(reinterpret_cast<char *>(&size), sizeof(size));
-	town.resize(size);
-	is.read(reinterpret_cast<char *>(&town[0]), size * sizeof(town[0]));
+	city.resize(size);
+	is.read(reinterpret_cast<char *>(&city[0]), size * sizeof(city[0]));
 
 	return is;
 }
@@ -37,9 +42,9 @@ std::ostream & Party::write(std::ostream & os) const
 	size = postcode.length() + 1U;
 	os.write(reinterpret_cast<const char *>(&size), sizeof(size))
 		.write(postcode.c_str(), size * sizeof(postcode[0]));
-	size = town.length() + 1U;
+	size = city.length() + 1U;
 	os.write(reinterpret_cast<const char *>(&size), sizeof(size))
-		.write(town.c_str(), size * sizeof(town[0]));
+		.write(city.c_str(), size * sizeof(city[0]));
 
 	return os;
 }
@@ -67,7 +72,7 @@ void Party::writeXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevEl
 	pPrevElement->InsertEndChild(pElement);
 
 	pElement = doc.NewElement("Miasto");
-	pElement->SetText(town.c_str());
+	pElement->SetText(city.c_str());
 	pPrevElement->InsertEndChild(pElement);
 }
 
@@ -82,7 +87,7 @@ void Party::createParty()
 	std::cout << "Kod pocz.: ";
 	std::getline(std::cin, postcode, '\n');
 	std::cout << "Miasto: ";
-	std::getline(std::cin, town, '\n');
+	std::getline(std::cin, city, '\n');
 }
 
 std::ostream & operator<<(std::ostream & os, const Party & p)
@@ -91,5 +96,5 @@ std::ostream & operator<<(std::ostream & os, const Party & p)
 		<< "NIP: " << p.NIP << "\n"
 		<< "Adres: " << p.address << "\n"
 		<< "Kod pocz.: " << p.postcode << "\n"
-		<< "Miasto: " << p.town << "\n";
+		<< "Miasto: " << p.city << "\n";
 }

@@ -61,13 +61,13 @@ void Receipt::writeNettoSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement
 	pPrevElement->InsertEndChild(pElement);
 }
 
-void Receipt::pushItem(const Item & c, unsigned int amount, float price)
+void Receipt::pushItem(const Item & c, unsigned int quantity, float price)
 {
 	items.push_back(c);
-	items.back().setQuantity(amount);
+	items.back().setQuantity(quantity);
 	items.back().setSalesPrice(price);
-	sum += amount * price;
-	PTUSum += (items.back().getSalesPrice() - items.back().getNettoPrice()) * amount;
+	sum += quantity * price;
+	PTUSum += (items.back().getSalesPrice() - items.back().getNettoPrice()) * quantity;
 }
 
 bool Receipt::createDocument() const

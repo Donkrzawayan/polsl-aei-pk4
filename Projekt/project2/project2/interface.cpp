@@ -126,7 +126,7 @@ void Interface::invoiceIssueMenu()
 	bool result = checkStock();
 	if (!result) return;
 
-	Invoice inv(db.pOwner(), db.getNo());
+	Invoice inv(db.pOwner(), db.getInvoiceNo());
 
 	bool end = false;
 	bool buyerCreated = false;
@@ -194,13 +194,13 @@ inline void Interface::addItem(Receipt & re)
 	--index; //index starts from zero
 
 	std::cout << "Ilosc: ";
-	unsigned int amount;
-	std::cin >> amount;
-	checkCin(amount);
+	unsigned int quantity;
+	std::cin >> quantity;
+	checkCin(quantity);
 
 	bool check;
 	try {
-		check = db.checkItem(index, amount);
+		check = db.checkItem(index, quantity);
 	}
 	catch (const std::out_of_range&) {
 		std::cout << "Nie ma takiej pozycji!\n";
@@ -210,15 +210,15 @@ inline void Interface::addItem(Receipt & re)
 	while (!check) {
 		std::cout << "Nie ma takiej ilosci na stanie\n"
 			<< "Wprowadz inna ilosc: ";
-		std::cin >> amount;
-		check = db.checkItem(index, amount);
+		std::cin >> quantity;
+		check = db.checkItem(index, quantity);
 	}
 	std::cout << "Cena sprzedazy [PLN]: ";
 	float price;
 	std::cin >> price;
 	checkCin(price);
 
-	re.pushItem(db[index], amount, price);
+	re.pushItem(db[index], quantity, price);
 }
 
 inline void Interface::confirmDocument(Receipt & re)

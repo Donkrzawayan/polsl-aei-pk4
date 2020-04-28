@@ -12,8 +12,9 @@ class Receipt //dodac zagniezdzna klase ItemRef
 {
 	const Party *owner; //const pointer to owner data
 	std::vector<Item> items;
-	//std::vector<std::tuple<size_t, unsigned int, float>> commodityRefs; //idea for future?
 	double sum, PTUSum;
+
+	//std::vector<std::tuple<size_t, unsigned int, float>> commodityRefs; //idea for future?
 protected:
 	//return date and time as a string; delim deliminate numbers
 	inline std::string date(const char delim = '\0')const;
@@ -34,7 +35,7 @@ public:
 	virtual ~Receipt() = default;
 
 	//push item to items
-	void pushItem(const Item &c, unsigned int amount, float price);
+	void pushItem(const Item &c, unsigned int quantity, float price);
 
 	//const_iterator for items forwarding
 	auto cbegin() { return items.cbegin(); }

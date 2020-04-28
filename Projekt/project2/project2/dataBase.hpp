@@ -13,7 +13,7 @@ private:
 
 	Party owner;
 	Items stock;
-	unsigned int no; //number next invoice
+	unsigned int invoiceNo; //number next invoice
 private:
 	//read base from bin; called from constructor
 	void readBase(std::ifstream &ifs);
@@ -28,16 +28,16 @@ public:
 	const Party *pOwner()const { return &owner; }
 
 	//getter number of invoice
-	unsigned int getNo() { return no++; }
+	unsigned int getInvoiceNo() { return invoiceNo++; }
 
 	//check if there is anything in the stock
 	bool checkStock()const { return stock.size(); }
 
 	/** Check whenever item exists in sufficient quantity
-	@return false if not enough amount
+	@return false if not enough quantity
 	@exception std::out_of_range for out-of-range index
 	*/
-	bool checkItem(const unsigned int index, const unsigned int amount)const { return stock.at(index).getQuantity() >= amount; }
+	bool checkItem(const unsigned int index, const int quantity)const { return stock.at(index).getQuantity() >= quantity; }
 
 	//accest to base elements
 	const Item &operator[](size_t n)const { return stock[n]; }
