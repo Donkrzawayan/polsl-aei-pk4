@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="helpfulness.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="dataBase.cpp" />
     <ClCompile Include="interface.cpp" />

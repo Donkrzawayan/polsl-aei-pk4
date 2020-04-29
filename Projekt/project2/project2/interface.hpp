@@ -2,7 +2,7 @@
 #define INTERFACE_HPP
 #include <string>
 #include "dataBase.hpp"
-#include "receipt.hpp"
+#include "invoice.hpp"
 
 class Interface
 {
@@ -15,6 +15,8 @@ private:
 public:
 	Interface(std::string dbFileName) : dbFileName(dbFileName), db(dbFileName) {}
 	void mainMenu(); //main loop
+private:
+	inline void mainMenuSwitch(char choice, bool &end);
 
 protected:
 	inline void changeOwnerData();
@@ -26,9 +28,15 @@ protected:
 	void receiptIssueMenu();
 	void invoiceIssueMenu();
 private:
+	inline void receiptIssueMenuSwitch(char choice, bool &end, Receipt &re);
+	inline void invoiceIssueMenuSwitch(char choice, bool &end, Invoice &inv);
+	inline void buyerNotCreated()const;
 	inline bool checkStock(); //check if there is anything in the stock
 	inline void addItem(Receipt &re); //add item from user to receipt/invoice
 	inline void confirmDocument(Receipt &re);
+
+protected:
+	void dailyReport();
 };
 
 template<typename T>

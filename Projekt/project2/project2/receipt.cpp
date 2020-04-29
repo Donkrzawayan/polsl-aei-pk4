@@ -1,33 +1,6 @@
 #include "receipt.hpp"
 #include "tinyxml2/tinyxml2.h"
-#include <ctime>
 #include "helpfulness.hpp"
-
-inline std::string Receipt::date(const char delim) const
-{
-	std::string date;
-	const time_t t = time(NULL);
-
-	date += std::to_string(localtime(&t)->tm_year + 1900);
-	if (delim != '\0') date += delim;
-	date += std::to_string(localtime(&t)->tm_mon + 1);
-	if (delim != '\0') date += delim;
-	date += std::to_string(localtime(&t)->tm_mday);
-	
-	return date;
-}
-
-inline std::string Receipt::hour(const char delim) const
-{
-	std::string hour;
-	const time_t t = time(NULL);
-
-	hour += std::to_string(localtime(&t)->tm_hour);
-	if (delim != '\0') hour += delim;
-	hour += std::to_string(localtime(&t)->tm_min);
-
-	return hour;
-}
 
 //inline void Receipt::writeSellerXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pElement) const
 //{
@@ -83,7 +56,7 @@ bool Receipt::createDocument() const
 		XMLElement * pElement;
 
 		pElement = doc.NewElement("Data");
-		pElement->SetText((date('.') + ' ' + hour(':')).c_str());
+		pElement->SetText((helpfulness::date('.') + ' ' + helpfulness::hour(':')).c_str());
 		pRoot->InsertEndChild(pElement);
 
 		pElement = doc.NewElement("Dane_sprzedawcy");
@@ -102,6 +75,6 @@ bool Receipt::createDocument() const
 
 	doc.InsertFirstChild(doc.NewDeclaration()); //add <?xml version="1.0" encoding="UTF-8"?>
 
-	XMLError result = doc.SaveFile((date() + hour() + ".xml").c_str());
+	XMLError result = doc.SaveFile((helpfulness::date() + helpfulness::hour() + ".xml").c_str());
 	return result == XML_SUCCESS;
 }

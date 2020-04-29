@@ -42,5 +42,5 @@ void ClearScreen(void)
 #else
 #include <stdio.h>
 
-void  ClearScreen() { printf("\033[H\033[J"); }
+void  ClearScreen(void) { printf("\033[H\033[J"); }
 #endif // _WIN32

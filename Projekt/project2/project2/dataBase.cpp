@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip> //std::setw
 #include <ctime>
+#include "helpfulness.hpp"
 
 void DataBase::readBase(std::ifstream &ifs)
 {
@@ -32,7 +33,7 @@ DataBase &DataBase::operator+=(Item &&c) {
 	return *this;
 }
 
-DataBase::DataBase(std::string dbFileName)
+DataBase::DataBase(std::string dbFileName): totalPayment(0.0L), totalPTUAmount(0.0L)
 {
 	std::ifstream ifs(dbFileName.c_str(), std::ios::binary | std::ios::in);
 	if (!ifs.is_open()){ //first use
@@ -105,6 +106,62 @@ bool DataBase::loadFromXMLInvoice(const std::string & docName)
 		}
 
 	return true;
+}
+
+bool DataBase::dailyRaport()
+{
+	using namespace tinyxml2;
+
+	XMLDocument doc;
+
+	XMLNode *pRoot = doc.NewElement("Raport_dobowy");
+
+	doc.InsertFirstChild(pRoot);
+	{
+		XMLElement * pElement;
+
+		pElement = doc.NewElement("Informacje_o_dokumencie");
+		{
+			XMLElement * pInfoElement;
+
+			pInfoElement = doc.NewElement("Data_wykonania_raportu_dobowego");
+			pInfoElement->SetText((helpfulness::date('.')).c_str());
+			pElement->InsertEndChild(pInfoElement);
+
+			pInfoElement = doc.NewElement("Godzina_wykonania_wydruku");
+			pInfoElement->SetText(helpfulness::hour(':').c_str());
+			pElement->InsertEndChild(pInfoElement);
+		}
+		pRoot->InsertEndChild(pElement);
+
+		pElement = doc.NewElement("Naleznosci");
+		{
+			XMLElement * pAmountElement;
+
+			pAmountElement = doc.NewElement("Laczna_kwota_sprzedazy_brutto");
+			pAmountElement->SetText(helpfulness::toStringPrecision2(totalPayment).c_str());
+			pElement->InsertEndChild(pAmountElement);
+
+			pAmountElement = doc.NewElement("Laczna_kwota_PTU");
+			pAmountElement->SetText(helpfulness::toStringPrecision2(totalPTUAmount).c_str());
+			pElement->InsertEndChild(pAmountElement);
+
+			pAmountElement = doc.NewElement("Waluta");
+			pAmountElement->SetText("PLN");
+			pElement->InsertEndChild(pAmountElement);
+		}
+		pRoot->InsertEndChild(pElement);
+	}
+
+	doc.InsertFirstChild(doc.NewDeclaration()); //add <?xml version="1.0" encoding="UTF-8"?>
+
+	XMLError result = doc.SaveFile(("Raport" + std::move(helpfulness::date()) + ".xml").c_str());
+	if (result == XML_SUCCESS) {
+		totalPayment = totalPTUAmount = 0.0L; //reset values
+		return true;
+	}
+	else
+		return false;
 }
 
 void DataBase::ShowStock() const

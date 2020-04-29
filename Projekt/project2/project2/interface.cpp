@@ -23,38 +23,37 @@ void Interface::mainMenu()
 			<< "2. Wprowadz towar/uslugi z faktury.\n"
 			<< "3. Wystaw paragon.\n"
 			<< "4. Wystaw fakture.\n"
-			<< "5. Zakoncz prace programu.\n"
+			<< "5. Wygeneruj raport dobowy.\n"
+			<< "6. Zakoncz prace programu.\n"
 			<< "--------------------------------------\n"
 			<< "Wybierz: ";
 		char choice;
 		std::cin >> choice;
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-		switch (choice)
-		{
-		case '1': {
-			changeOwnerData();
-			break;
-		}
-		case '2': {
-			addFromInvoice();
-			break;
-		}
-		case '3': {
-			receiptIssueMenu();
-			break;
-		}
-		case '4': {
-			invoiceIssueMenu();
-			break;
-		}
-		case EOF:
-			std::cout << "Bledny format danych.\n";
-		case '5':
-			db.writeBase(dbFileName);
-			end = true;
-			break;
-		}
+		mainMenuSwitch(choice, end);
+	}
+}
+
+inline void Interface::mainMenuSwitch(char choice, bool & end)
+{
+	switch (choice)
+	{
+	case '1':
+		return changeOwnerData();
+	case '2':
+		return addFromInvoice();
+	case '3':
+		return receiptIssueMenu();
+	case '4':
+		return invoiceIssueMenu();
+	case '5':
+		return dailyReport();
+	case EOF:
+		std::cout << "Bledny format danych.\n";
+	case '6':
+		end = true;
+		return db.writeBase(dbFileName);
 	}
 }
 
@@ -107,17 +106,7 @@ void Interface::receiptIssueMenu()
 		std::cin >> choice;
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-		switch (choice) {
-		case '1': {
-			addItem(re);
-			break;
-		}
-		case '2':
-			confirmDocument(re);
-		case '3':
-			end = true;
-			break;
-		}
+		receiptIssueMenuSwitch(choice, end, re);
 	}
 }
 
@@ -129,7 +118,6 @@ void Interface::invoiceIssueMenu()
 	Invoice inv(db.pOwner(), db.getInvoiceNo());
 
 	bool end = false;
-	bool buyerCreated = false;
 	while (!end) {
 		ClearScreen();
 		std::cout << "MENU WYSTAWIANIA FAKTURY\n"
@@ -144,28 +132,46 @@ void Interface::invoiceIssueMenu()
 		std::cin >> choice;
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-		switch (choice) {
-		case '1': {
-			inv.createBuyer();
-			buyerCreated = true;
-			break;
-		}
-		case '2': {
-			addItem(inv);
-			break;
-		}
-		case '3':
-			if (!buyerCreated) {
-				std::cout << "Wprowadz dane kupujacego przed wystawieniem faktury. [ENTER]";
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				break;
-			}
-			confirmDocument(inv);
-		case '4':
-			end = true;
-			break;
-		}
+		invoiceIssueMenuSwitch(choice, end, inv);
+		
 	}
+}
+
+inline void Interface::receiptIssueMenuSwitch(char choice, bool & end, Receipt &re)
+{
+	switch (choice) {
+	case '1':
+		return addItem(re);
+	case '2':
+		return confirmDocument(re);
+	case '3':
+		end = true;
+	}
+}
+
+inline void Interface::invoiceIssueMenuSwitch(char choice, bool & end, Invoice &inv)
+{
+	bool buyerCreated = false;
+
+	switch (choice) {
+	case '1':
+		buyerCreated = true;
+		return inv.createBuyer();
+	case '2':
+		return addItem(inv);
+	case '3':
+		if (!buyerCreated)
+			return buyerNotCreated();
+		confirmDocument(inv);
+	case '4':
+		end = true;
+	}
+}
+
+inline void Interface::buyerNotCreated() const
+{
+	std::cout << "Wprowadz dane kupujacego przed wystawieniem faktury. [ENTER]";
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
 inline bool Interface::checkStock()
@@ -187,10 +193,14 @@ inline void Interface::addItem(Receipt & re)
 	std::cout << "Stan:\n";
 	db.ShowStock();
 
-	std::cout << "Indeks pozycji do dodania: ";
+	std::cout << "Indeks pozycji do dodania [0 aby anulowac dodawanie]: ";
 	unsigned int index;
 	std::cin >> index;
 	checkCin(index);
+
+	if (index == 0) //cancel adding
+		return;
+
 	--index; //index starts from zero
 
 	std::cout << "Ilosc: ";
@@ -224,6 +234,12 @@ inline void Interface::addItem(Receipt & re)
 inline void Interface::confirmDocument(Receipt & re)
 {
 	bool result = re.createDocument();
+	db.addSum(re.getSum(), re.getPTUSum());
 	if (result)
 		db.remove(re.cbegin(), re.cend()); //remove from stock
+}
+
+void Interface::dailyReport()
+{
+	db.dailyRaport();
 }

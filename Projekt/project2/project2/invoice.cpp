@@ -4,6 +4,7 @@
 #include "tinyxml2/tinyxml2.h"
 #include <string>
 #include <utility> //move
+#include "helpfulness.hpp"
 
 void Invoice::writeSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement) const
 {
@@ -34,15 +35,15 @@ bool Invoice::createDocument() const
 			XMLElement * pInfoElement;
 
 			pInfoElement = doc.NewElement("Nr");
-			pInfoElement->SetText(("FV" + std::move(date()) + std::move(std::to_string(invoiceNo))).c_str()); //performance FTW
+			pInfoElement->SetText(("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo))).c_str()); //performance FTW
 			pElement->InsertEndChild(pInfoElement);
 
 			pInfoElement = doc.NewElement("Data_wystawienia");
-			pInfoElement->SetText(date('.').c_str());
+			pInfoElement->SetText(helpfulness::date('.').c_str());
 			pElement->InsertEndChild(pInfoElement);
 
 			pInfoElement = doc.NewElement("Godzina");
-			pInfoElement->SetText(hour(':').c_str());
+			pInfoElement->SetText(helpfulness::hour(':').c_str());
 			pElement->InsertEndChild(pInfoElement);
 		}
 		pRoot->InsertEndChild(pElement);
@@ -69,6 +70,6 @@ bool Invoice::createDocument() const
 
 	doc.InsertFirstChild(doc.NewDeclaration()); //add <?xml version="1.0" encoding="UTF-8"?>
 
-	XMLError result = doc.SaveFile(("FV" + std::move(date()) + std::move(std::to_string(invoiceNo)) + ".xml").c_str());
+	XMLError result = doc.SaveFile(("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo)) + ".xml").c_str());
 	return result == XML_SUCCESS;
 }

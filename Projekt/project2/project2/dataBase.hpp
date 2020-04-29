@@ -14,6 +14,10 @@ private:
 	Party owner;
 	Items stock;
 	unsigned int invoiceNo; //number next invoice
+
+	//daily raport
+	long double totalPayment;
+	long double totalPTUAmount;
 private:
 	//read base from bin; called from constructor
 	void readBase(std::ifstream &ifs);
@@ -23,9 +27,13 @@ private:
 public:
 	DataBase(std::string dbFileName = "db.bin");
 
+
 	//owner operations
 	void createOwner();
 	const Party *pOwner()const { return &owner; }
+
+
+	//receipt and invoice operations
 
 	//getter number of invoice
 	unsigned int getInvoiceNo() { return invoiceNo++; }
@@ -46,14 +54,24 @@ public:
 	template <typename InputIterator>
 	void remove(InputIterator first, InputIterator last);
 
+	//
+
+
 	//sort and write base to bin
 	void writeBase(std::string dbFileName = "db.bin");
 
-	//show to console
+	//show stock to console
 	void ShowStock()const;
 
 	//load from file given by parametr
 	bool loadFromXMLInvoice(const std::string &docName);
+
+
+	//osobna klasa na raport?
+
+	//generate daily report file
+	void addSum(double sum, double PTUSum) { totalPayment += sum, totalPTUAmount += PTUSum; }
+	bool dailyRaport();
 };
 
 template<typename InputIterator>

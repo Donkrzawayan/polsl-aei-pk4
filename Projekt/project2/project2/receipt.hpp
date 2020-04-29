@@ -16,10 +16,6 @@ class Receipt //dodac zagniezdzna klase ItemRef
 
 	//std::vector<std::tuple<size_t, unsigned int, float>> commodityRefs; //idea for future?
 protected:
-	//return date and time as a string; delim deliminate numbers
-	inline std::string date(const char delim = '\0')const;
-	inline std::string hour(const char delim = '\0')const;
-
 	//writing seller to XML
 	void writeSellerXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pElement)const { owner->writeXML(doc, pElement); }
 
@@ -33,6 +29,9 @@ protected:
 public:
 	Receipt(const Party *owner) : owner(owner), sum(0.0), PTUSum(0.0) {}
 	virtual ~Receipt() = default;
+
+	double getSum() { return sum; }
+	double getPTUSum() { return PTUSum; }
 
 	//push item to items
 	void pushItem(const Item &c, unsigned int quantity, float price);
