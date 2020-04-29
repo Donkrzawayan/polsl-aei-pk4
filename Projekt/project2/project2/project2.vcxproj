@@ -176,6 +176,7 @@
     <ClInclude Include="helpfulness.hpp" />
     <ClInclude Include="interface.hpp" />
     <ClInclude Include="invoice.hpp" />
+    <ClInclude Include="menusStringLiterals.h" />
     <ClInclude Include="party.hpp" />
     <ClInclude Include="receipt.hpp" />
     <ClInclude Include="tinyxml2\tinyxml2.h" />

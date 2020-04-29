@@ -25,11 +25,14 @@ protected:
 
 	//writing sum to XML
 	void writeSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement)const;
-	void writeNettoSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement)const;
+	void writeNettoSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement)const {
+		helpfulness::addEndElement(doc, "Suma_netto", helpfulness::toStringPrecision2(sum - PTUSum).c_str(), pPrevElement);
+	}
 public:
 	Receipt(const Party *owner) : owner(owner), sum(0.0), PTUSum(0.0) {}
 	virtual ~Receipt() = default;
 
+	//getters for sum
 	double getSum() { return sum; }
 	double getPTUSum() { return PTUSum; }
 
@@ -44,6 +47,7 @@ public:
 
 	//create XML document
 	virtual bool createDocument()const;
+	inline bool saveXML(tinyxml2::XMLDocument & doc, const char *docName)const;
 };
 
 template<typename Function>

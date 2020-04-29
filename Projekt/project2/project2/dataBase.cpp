@@ -6,7 +6,13 @@
 
 void DataBase::readBase(std::ifstream &ifs)
 {
-	//read month and invoiceNo
+	owner.read(ifs);
+	readMonthAndInvoiceNo(ifs);
+	readStock(ifs);
+}
+
+inline void DataBase::readMonthAndInvoiceNo(std::ifstream & ifs)
+{
 	int month;
 	ifs.read(reinterpret_cast<char *>(&month), sizeof(month));
 	ifs.read(reinterpret_cast<char *>(&invoiceNo), sizeof(invoiceNo));
@@ -14,11 +20,14 @@ void DataBase::readBase(std::ifstream &ifs)
 	//if month has changed reset invoice invoiceNo
 	const time_t t = time(NULL);
 	if (month != localtime(&t)->tm_mon) invoiceNo = 1U;
-		
+}
+
+inline void DataBase::readStock(std::ifstream & ifs)
+{
 	size_t size;
 	ifs.read(reinterpret_cast<char *>(&size), sizeof(size));
 	stock.resize(size);
-	for (auto &item: stock)
+	for (auto &item : stock)
 		item.read(ifs);
 }
 
@@ -43,7 +52,6 @@ DataBase::DataBase(std::string dbFileName): totalPayment(0.0L), totalPTUAmount(0
 		createOwner();
 	}
 	else {
-		owner.read(ifs);
 		readBase(ifs);
 		ifs.close();
 	}
@@ -60,25 +68,32 @@ void DataBase::writeBase(std::string dbFileName)
 	std::sort(stock.begin(), stock.end()); //sort items in stock
 
 	std::ofstream ofs(dbFileName.c_str(), std::ios::binary | std::ios::out);
-	if (!ofs.is_open()) {
+	if (!ofs.is_open())
 		std::cout << "Nie mozna otworzyc pliku.";
-	}
 	else {
 		owner.write(ofs);
-
-		//write month and invoiceNo
-		const time_t t = time(NULL);
-		int month = localtime(&t)->tm_mon;
-		ofs.write(reinterpret_cast<const char *>(&month), sizeof(month));
-		ofs.write(reinterpret_cast<const char *>(&invoiceNo), sizeof(invoiceNo));
-
-		const size_t size = stock.size();
-
-		ofs.write(reinterpret_cast<const char *>(&size), sizeof(size));
-		for (const auto &item : stock)
-			item.write(ofs);
+		writeMonthAndInvoiceNo(ofs);
+		writeStock(ofs);
+		
 		ofs.close();
 	}
+}
+
+inline void DataBase::writeMonthAndInvoiceNo(std::ofstream & ofs) const
+{
+	const time_t t = time(NULL);
+	int month = localtime(&t)->tm_mon;
+	ofs.write(reinterpret_cast<const char *>(&month), sizeof(month));
+	ofs.write(reinterpret_cast<const char *>(&invoiceNo), sizeof(invoiceNo));
+}
+
+inline void DataBase::writeStock(std::ofstream & ofs) const
+{
+	const size_t size = stock.size();
+
+	ofs.write(reinterpret_cast<const char *>(&size), sizeof(size));
+	for (const auto &item : stock)
+		item.write(ofs);
 }
 
 bool DataBase::loadFromXMLInvoice(const std::string & docName)
@@ -110,48 +125,37 @@ bool DataBase::loadFromXMLInvoice(const std::string & docName)
 
 bool DataBase::dailyRaport()
 {
-	using namespace tinyxml2;
+	tinyxml2::XMLDocument doc;
 
-	XMLDocument doc;
-
-	XMLNode *pRoot = doc.NewElement("Raport_dobowy");
+	tinyxml2::XMLNode *pRoot = doc.NewElement("Raport_dobowy");
 
 	doc.InsertFirstChild(pRoot);
-	{
-		XMLElement * pElement;
+		writeDocumentInfoXML(doc, pRoot);
+		writePaymentXML(doc, pRoot);
 
-		pElement = doc.NewElement("Informacje_o_dokumencie");
-		{
-			XMLElement * pInfoElement;
+	return saveXML(doc);
+}
 
-			pInfoElement = doc.NewElement("Data_wykonania_raportu_dobowego");
-			pInfoElement->SetText((helpfulness::date('.')).c_str());
-			pElement->InsertEndChild(pInfoElement);
+inline void DataBase::writeDocumentInfoXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLNode * pRoot) const
+{
+	tinyxml2::XMLElement * pElement = doc.NewElement("Informacje_o_dokumencie");
+	helpfulness::addEndElement(doc, "Data_wykonania_raportu_dobowego", helpfulness::date('.').c_str(), pElement);
+	helpfulness::addEndElement(doc, "Godzina_wykonania_wydruku", helpfulness::hour(':').c_str(), pElement);
+	pRoot->InsertEndChild(pElement);
+}
 
-			pInfoElement = doc.NewElement("Godzina_wykonania_wydruku");
-			pInfoElement->SetText(helpfulness::hour(':').c_str());
-			pElement->InsertEndChild(pInfoElement);
-		}
-		pRoot->InsertEndChild(pElement);
+inline void DataBase::writePaymentXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLNode * pRoot) const
+{
+	tinyxml2::XMLElement *pElement = doc.NewElement("Naleznosci");
+	helpfulness::addEndElement(doc, "Laczna_kwota_sprzedazy_brutto", helpfulness::toStringPrecision2(totalPayment).c_str(), pElement);
+	helpfulness::addEndElement(doc, "Laczna_kwota_PTU", helpfulness::toStringPrecision2(totalPTUAmount).c_str(), pElement);
+	helpfulness::addEndElement(doc, "Waluta", "PLN", pElement);
+	pRoot->InsertEndChild(pElement);
+}
 
-		pElement = doc.NewElement("Naleznosci");
-		{
-			XMLElement * pAmountElement;
-
-			pAmountElement = doc.NewElement("Laczna_kwota_sprzedazy_brutto");
-			pAmountElement->SetText(helpfulness::toStringPrecision2(totalPayment).c_str());
-			pElement->InsertEndChild(pAmountElement);
-
-			pAmountElement = doc.NewElement("Laczna_kwota_PTU");
-			pAmountElement->SetText(helpfulness::toStringPrecision2(totalPTUAmount).c_str());
-			pElement->InsertEndChild(pAmountElement);
-
-			pAmountElement = doc.NewElement("Waluta");
-			pAmountElement->SetText("PLN");
-			pElement->InsertEndChild(pAmountElement);
-		}
-		pRoot->InsertEndChild(pElement);
-	}
+inline bool DataBase::saveXML(tinyxml2::XMLDocument & doc)
+{
+	using namespace tinyxml2;
 
 	doc.InsertFirstChild(doc.NewDeclaration()); //add <?xml version="1.0" encoding="UTF-8"?>
 

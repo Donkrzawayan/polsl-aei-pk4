@@ -1,6 +1,4 @@
 #include "receipt.hpp"
-#include "tinyxml2/tinyxml2.h"
-#include "helpfulness.hpp"
 
 //inline void Receipt::writeSellerXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pElement) const
 //{
@@ -12,26 +10,8 @@
 
 inline void Receipt::writeSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement) const
 {
-	using namespace tinyxml2;
-
-	XMLElement * pElement;
-
-	pElement = doc.NewElement("Suma_PLN");
-	pElement->SetText(helpfulness::toStringPrecision2(sum).c_str());
-	pPrevElement->InsertEndChild(pElement);
-
-	pElement = doc.NewElement("Suma_PTU");
-	pElement->SetText(helpfulness::toStringPrecision2(PTUSum).c_str());
-	pPrevElement->InsertEndChild(pElement);
-}
-
-void Receipt::writeNettoSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement) const
-{
-	using namespace tinyxml2;
-
-	XMLElement * pElement = doc.NewElement("Suma_netto");
-	pElement->SetText(helpfulness::toStringPrecision2(sum - PTUSum).c_str());
-	pPrevElement->InsertEndChild(pElement);
+	helpfulness::addEndElement(doc, "Suma_PLN", helpfulness::toStringPrecision2(sum).c_str(), pPrevElement);
+	helpfulness::addEndElement(doc, "Suma_PTU", helpfulness::toStringPrecision2(PTUSum).c_str(), pPrevElement);
 }
 
 void Receipt::pushItem(const Item & c, unsigned int quantity, float price)
@@ -53,11 +33,9 @@ bool Receipt::createDocument() const
 
 	doc.InsertFirstChild(pRoot);
 	{
-		XMLElement * pElement;
+		helpfulness::addEndElement(doc, "Data", (helpfulness::date('.') + ' ' + helpfulness::hour(':')).c_str(), pRoot);
 
-		pElement = doc.NewElement("Data");
-		pElement->SetText((helpfulness::date('.') + ' ' + helpfulness::hour(':')).c_str());
-		pRoot->InsertEndChild(pElement);
+		XMLElement * pElement;
 
 		pElement = doc.NewElement("Dane_sprzedawcy");
 		writeSellerXML(doc, pElement);
@@ -65,7 +43,7 @@ bool Receipt::createDocument() const
 
 		pElement = doc.NewElement("Pozycje_na_paragonie");
 		for_eachItem(doc, pElement,
-			[](XMLDocument &doc, XMLElement * pElement, const Item &i) { i.writeXML(doc, pElement); });
+			[](XMLDocument &doc, XMLElement * pElement, const Item &item) { item.writeXML(doc, pElement); });
 		pRoot->InsertEndChild(pElement);
 
 		pElement = doc.NewElement("Suma");
@@ -73,8 +51,13 @@ bool Receipt::createDocument() const
 		pRoot->InsertEndChild(pElement);
 	}
 
+	return saveXML(doc, (helpfulness::date() + helpfulness::hour() + ".xml").c_str());
+}
+
+inline bool Receipt::saveXML(tinyxml2::XMLDocument & doc, const char * docName) const
+{
 	doc.InsertFirstChild(doc.NewDeclaration()); //add <?xml version="1.0" encoding="UTF-8"?>
 
-	XMLError result = doc.SaveFile((helpfulness::date() + helpfulness::hour() + ".xml").c_str());
-	return result == XML_SUCCESS;
+	tinyxml2::XMLError result = doc.SaveFile(docName);
+	return result == tinyxml2::XML_SUCCESS;
 }

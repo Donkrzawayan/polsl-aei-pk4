@@ -2,7 +2,7 @@
 extern "C" {
 #include "windowsFunctions.h"
 }
-#include "invoice.hpp"
+#include "menusStringLiterals.h"
 
 void Interface::mainMenu()
 {
@@ -10,26 +10,9 @@ void Interface::mainMenu()
 
 	while (!end) {
 		ClearScreen();
-		std::cout
-			<< " _____  _            _____            _                     \n"
-			<< "|_   _||_| ___  _ _ | __  | _ _  ___ |_| ___  ___  ___  ___ \n"
-			<< "  | |  | ||   || | || __ -|| | ||_ -|| ||   || -_||_ -||_ -|\n"
-			<< "  |_|  |_||_|_||_  ||_____||___||___||_||_|_||___||___||___|\n"
-			<< "               |___|                                        \n"
-			<< "____________________________________________________________________________________________________________\n"
-			<< "MENU GLOWNE\n"
-			<< "--------------------------------------\n"
-			<< "1. Dane Twojej firmy.\n"
-			<< "2. Wprowadz towar/uslugi z faktury.\n"
-			<< "3. Wystaw paragon.\n"
-			<< "4. Wystaw fakture.\n"
-			<< "5. Wygeneruj raport dobowy.\n"
-			<< "6. Zakoncz prace programu.\n"
-			<< "--------------------------------------\n"
+		std::cout << menusStrings::logo << menusStrings::mainMenu
 			<< "Wybierz: ";
-		char choice;
-		std::cin >> choice;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		char choice = getCharFromCin();
 
 		mainMenuSwitch(choice, end);
 	}
@@ -60,13 +43,11 @@ inline void Interface::mainMenuSwitch(char choice, bool & end)
 inline void Interface::changeOwnerData()
 {
 	ClearScreen();
-	std::cout << "Dane Twojej firmy\n"
+	std::cout << menusStrings::logo << "Dane Twojej firmy\n"
 		<< "Obecne dane:\n"
 		<< (*db.pOwner())
 		<< "Zmienic? [T/n]: ";
-	char choice;
-	std::cin >> choice;
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	char choice = getCharFromCin();
 
 	if (choice == 'T' || choice == 't')
 		db.createOwner();
@@ -95,16 +76,9 @@ void Interface::receiptIssueMenu()
 	bool end = false;
 	while (!end) {
 		ClearScreen();
-		std::cout << "MENU WYSTAWIANIA PARAGONU\n"
-			<< "--------------------------------------\n"
-			<< "1. Dodaj pozycje do paragonu.\n"
-			<< "2. Zatwierdz paragon.\n"
-			<< "3. Anuluj wystawianie paragonu.\n"
-			<< "--------------------------------------\n"
+		std::cout << menusStrings::logo << menusStrings::receiptMenu
 			<< "Wybierz: ";
-		char choice;
-		std::cin >> choice;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		char choice = getCharFromCin();
 
 		receiptIssueMenuSwitch(choice, end, re);
 	}
@@ -118,21 +92,14 @@ void Interface::invoiceIssueMenu()
 	Invoice inv(db.pOwner(), db.getInvoiceNo());
 
 	bool end = false;
+	bool buyerCreated = false;
 	while (!end) {
 		ClearScreen();
-		std::cout << "MENU WYSTAWIANIA FAKTURY\n"
-			<< "--------------------------------------\n"
-			<< "1. Wprowadz dane kupujacego.\n"
-			<< "2. Dodaj pozycje do faktury.\n"
-			<< "3. Zatwierdz fakture.\n"
-			<< "4. Anuluj wystawianie faktury.\n"
-			<< "--------------------------------------\n"
+		std::cout << menusStrings::logo << menusStrings::invoiceMenu
 			<< "Wybierz: ";
-		char choice;
-		std::cin >> choice;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		char choice = getCharFromCin();
 
-		invoiceIssueMenuSwitch(choice, end, inv);
+		invoiceIssueMenuSwitch(choice, end, buyerCreated, inv);
 		
 	}
 }
@@ -143,16 +110,14 @@ inline void Interface::receiptIssueMenuSwitch(char choice, bool & end, Receipt &
 	case '1':
 		return addItem(re);
 	case '2':
-		return confirmDocument(re);
+		confirmDocument(re);
 	case '3':
 		end = true;
 	}
 }
 
-inline void Interface::invoiceIssueMenuSwitch(char choice, bool & end, Invoice &inv)
+inline void Interface::invoiceIssueMenuSwitch(char choice, bool & end, bool &buyerCreated, Invoice &inv)
 {
-	bool buyerCreated = false;
-
 	switch (choice) {
 	case '1':
 		buyerCreated = true;
@@ -174,7 +139,7 @@ inline void Interface::buyerNotCreated() const
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-inline bool Interface::checkStock()
+inline bool Interface::checkStock() const
 {
 	bool result = db.checkStock();
 	if (!result) {
@@ -189,46 +154,54 @@ inline bool Interface::checkStock()
 
 inline void Interface::addItem(Receipt & re)
 {
-	ClearScreen();
-	std::cout << "Stan:\n";
-	db.ShowStock();
+	ShowStock();
 
-	std::cout << "Indeks pozycji do dodania [0 aby anulowac dodawanie]: ";
-	unsigned int index;
-	std::cin >> index;
-	checkCin(index);
+	unsigned int index = getNumberFromCin<unsigned int>("Indeks pozycji do dodania [0 aby anulowac dodawanie]: ");
 
-	if (index == 0) //cancel adding
-		return;
-
+	if (index == 0) return; //cancel adding
 	--index; //index starts from zero
 
-	std::cout << "Ilosc: ";
-	unsigned int quantity;
-	std::cin >> quantity;
-	checkCin(quantity);
+	unsigned int quantity = getNumberFromCin<unsigned int>("Ilosc: ");
 
 	bool check;
 	try {
 		check = db.checkItem(index, quantity);
 	}
 	catch (const std::out_of_range&) {
-		std::cout << "Nie ma takiej pozycji!\n";
+		std::cout << "Nie ma takiej pozycji! [ENTER]";
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		return;
 	}
 
-	while (!check) {
-		std::cout << "Nie ma takiej ilosci na stanie\n"
-			<< "Wprowadz inna ilosc: ";
-		std::cin >> quantity;
-		check = db.checkItem(index, quantity);
-	}
-	std::cout << "Cena sprzedazy [PLN]: ";
-	float price;
-	std::cin >> price;
-	checkCin(price);
+	if(!check)
+		checkItemQuantity(index, quantity);
+	
+	float price = getNumberFromCin<float>("Cena sprzedazy [PLN]: ");
 
 	re.pushItem(db[index], quantity, price);
+}
+
+inline char Interface::getCharFromCin() const
+{
+	char character;
+	std::cin >> character;
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	return character;
+}
+
+inline void Interface::ShowStock() const
+{
+	ClearScreen();
+	std::cout << "Stan:\n";
+	db.ShowStock();
+}
+
+inline void Interface::checkItemQuantity(unsigned int index, unsigned int quantity) const
+{
+	do {
+		std::cout << "Nie ma takiej ilosci na stanie\n";
+		quantity = getNumberFromCin<unsigned int>("Wprowadz inna ilosc: ");
+	} while (!db.checkItem(index, quantity));
 }
 
 inline void Interface::confirmDocument(Receipt & re)
@@ -237,9 +210,4 @@ inline void Interface::confirmDocument(Receipt & re)
 	db.addSum(re.getSum(), re.getPTUSum());
 	if (result)
 		db.remove(re.cbegin(), re.cend()); //remove from stock
-}
-
-void Interface::dailyReport()
-{
-	db.dailyRaport();
 }

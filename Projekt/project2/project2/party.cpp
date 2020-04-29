@@ -1,5 +1,6 @@
 #include "party.hpp"
 #include <iostream>
+#include "helpfulness.hpp"
 
 std::istream & Party::read(std::istream & is)
 {
@@ -51,29 +52,11 @@ std::ostream & Party::write(std::ostream & os) const
 
 void Party::writeXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement) const
 {
-	using namespace tinyxml2;
-
-	XMLElement * pElement;
-
-	pElement = doc.NewElement("Nazwa");
-	pElement->SetText(name.c_str());
-	pPrevElement->InsertEndChild(pElement);
-
-	pElement = doc.NewElement("NIP");
-	pElement->SetText(NIP.c_str());
-	pPrevElement->InsertEndChild(pElement);
-
-	pElement = doc.NewElement("Adres");
-	pElement->SetText(address.c_str());
-	pPrevElement->InsertEndChild(pElement);
-
-	pElement = doc.NewElement("Kod_pocz.");
-	pElement->SetText(postcode.c_str());
-	pPrevElement->InsertEndChild(pElement);
-
-	pElement = doc.NewElement("Miasto");
-	pElement->SetText(city.c_str());
-	pPrevElement->InsertEndChild(pElement);
+	helpfulness::addEndElement(doc, "Nazwa", name.c_str(), pPrevElement);
+	helpfulness::addEndElement(doc, "NIP", NIP.c_str(), pPrevElement);
+	helpfulness::addEndElement(doc, "Adres", address.c_str(), pPrevElement);
+	helpfulness::addEndElement(doc, "Kod_pocz.", postcode.c_str(), pPrevElement);
+	helpfulness::addEndElement(doc, "Miasto", city.c_str(), pPrevElement);
 }
 
 void Party::createParty()

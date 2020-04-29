@@ -19,9 +19,6 @@ private:
 	long double totalPayment;
 	long double totalPTUAmount;
 private:
-	//read base from bin; called from constructor
-	void readBase(std::ifstream &ifs);
-
 	//adding items to base; called from loadFromInvoice
 	DataBase &operator+=(Item &&c);
 public:
@@ -54,17 +51,25 @@ public:
 	template <typename InputIterator>
 	void remove(InputIterator first, InputIterator last);
 
-	//
 
-
-	//sort and write base to bin
-	void writeBase(std::string dbFileName = "db.bin");
+	//showing, wrighting, reading
 
 	//show stock to console
 	void ShowStock()const;
+	//sort and write base to bin
+	void writeBase(std::string dbFileName = "db.bin");
+private:
+	//read base from bin; called from constructor
+	void readBase(std::ifstream &ifs);
+	inline void readMonthAndInvoiceNo(std::ifstream &ifs);
+	inline void readStock(std::ifstream &ifs);
+	inline void writeMonthAndInvoiceNo(std::ofstream &ofs)const;
+	inline void writeStock(std::ofstream &ofs)const;
 
+public:
 	//load from file given by parametr
 	bool loadFromXMLInvoice(const std::string &docName);
+
 
 
 	//osobna klasa na raport?
@@ -72,6 +77,10 @@ public:
 	//generate daily report file
 	void addSum(double sum, double PTUSum) { totalPayment += sum, totalPTUAmount += PTUSum; }
 	bool dailyRaport();
+private:
+	inline void writeDocumentInfoXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLNode * pRoot)const;
+	inline void writePaymentXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLNode * pRoot)const;
+	inline bool saveXML(tinyxml2::XMLDocument & doc);
 };
 
 template<typename InputIterator>

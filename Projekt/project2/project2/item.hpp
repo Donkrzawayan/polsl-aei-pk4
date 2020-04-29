@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream> //streamsize
 #include "tinyxml2/tinyxml2.h"
+#include "helpfulness.hpp"
 
 class Item
 {
@@ -40,7 +41,9 @@ public:
 	std::istream &read(std::istream & is);
 	std::ostream &write(std::ostream & os)const;
 	void writeXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement)const;
-	void writeNettoXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement)const;
+	void writeNettoXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement)const {
+		helpfulness::addEndElement(doc, "Cena_netto", helpfulness::toStringPrecision2(getNettoPrice()).c_str(), pPrevElement);
+	}
 	bool readXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement);
 };
 

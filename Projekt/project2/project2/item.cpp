@@ -51,34 +51,10 @@ std::ostream & Item::write(std::ostream & os) const
 
 void Item::writeXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement) const
 {
-	using namespace tinyxml2;
-
-	XMLElement * pElement;
-
-	pElement = doc.NewElement("Nazwa");
-	pElement->SetText(description.c_str());
-	pPrevElement->InsertEndChild(pElement);
-
-	pElement = doc.NewElement("Ilosc");
-	pElement->SetText(quantity);
-	pPrevElement->InsertEndChild(pElement);
-
-	pElement = doc.NewElement("VAT_proc.");
-	pElement->SetText(vat);
-	pPrevElement->InsertEndChild(pElement);
-
-	pElement = doc.NewElement("Cena_brutto");
-	pElement->SetText(helpfulness::toStringPrecision2(salesPrice).c_str());
-	pPrevElement->InsertEndChild(pElement);
-}
-
-void Item::writeNettoXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement) const
-{
-	using namespace tinyxml2;
-
-	XMLElement * pElement = doc.NewElement("Cena_netto");
-	pElement->SetText(helpfulness::toStringPrecision2(getNettoPrice()).c_str());
-	pPrevElement->InsertEndChild(pElement);
+	helpfulness::addEndElement(doc, "Nazwa", description.c_str(), pPrevElement);
+	helpfulness::addEndElement(doc, "Ilosc", quantity, pPrevElement);
+	helpfulness::addEndElement(doc, "VAT_proc.", vat, pPrevElement);
+	helpfulness::addEndElement(doc, "Cena_brutto", helpfulness::toStringPrecision2(salesPrice).c_str(), pPrevElement);
 }
 
 bool Item::readXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement)

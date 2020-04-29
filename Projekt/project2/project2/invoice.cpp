@@ -1,7 +1,6 @@
 
 #include "invoice.hpp"
 #include <iostream>
-#include "tinyxml2/tinyxml2.h"
 #include <string>
 #include <utility> //move
 #include "helpfulness.hpp"
@@ -32,19 +31,11 @@ bool Invoice::createDocument() const
 
 		pElement = doc.NewElement("Informacje_o_dokumencie");
 		{
-			XMLElement * pInfoElement;
-
-			pInfoElement = doc.NewElement("Nr");
-			pInfoElement->SetText(("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo))).c_str()); //performance FTW
-			pElement->InsertEndChild(pInfoElement);
-
-			pInfoElement = doc.NewElement("Data_wystawienia");
-			pInfoElement->SetText(helpfulness::date('.').c_str());
-			pElement->InsertEndChild(pInfoElement);
-
-			pInfoElement = doc.NewElement("Godzina");
-			pInfoElement->SetText(helpfulness::hour(':').c_str());
-			pElement->InsertEndChild(pInfoElement);
+			helpfulness::addEndElement(doc, "Nr",
+				("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo))).c_str(),
+				pElement);
+			helpfulness::addEndElement(doc, "Data_wystawienia", helpfulness::date('.').c_str(), pElement);
+			helpfulness::addEndElement(doc, "Godzina", helpfulness::hour(':').c_str(), pElement);
 		}
 		pRoot->InsertEndChild(pElement);
 
@@ -53,14 +44,12 @@ bool Invoice::createDocument() const
 		pRoot->InsertEndChild(pElement);
 
 		pElement = doc.NewElement("Dane_kupujacego");
-		{
 			contractor.writeXML(doc, pElement);
-		}
 		pRoot->InsertEndChild(pElement);
 
 		pElement = doc.NewElement("Pozycje_na_paragonie");
 		for_eachItem(doc, pElement,
-			[](XMLDocument &doc, XMLElement * pElement, const Item &i) {i.writeXML(doc, pElement); i.writeNettoXML(doc, pElement); });
+			[](XMLDocument &doc, XMLElement * pElement, const Item &item) {item.writeXML(doc, pElement); item.writeNettoXML(doc, pElement); });
 		pRoot->InsertEndChild(pElement);
 
 		pElement = doc.NewElement("Suma");
@@ -68,8 +57,5 @@ bool Invoice::createDocument() const
 		pRoot->InsertEndChild(pElement);
 	}
 
-	doc.InsertFirstChild(doc.NewDeclaration()); //add <?xml version="1.0" encoding="UTF-8"?>
-
-	XMLError result = doc.SaveFile(("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo)) + ".xml").c_str());
-	return result == XML_SUCCESS;
+	return saveXML(doc, ("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo)) + ".xml").c_str());
 }

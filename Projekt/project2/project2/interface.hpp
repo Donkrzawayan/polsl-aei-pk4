@@ -10,8 +10,12 @@ class Interface
 	DataBase db;
 private:
 	template<typename T>
-	void checkCin(T &t);
+	void checkAndRepairCin(T &t)const;
 
+	template <typename T>
+	T getNumberFromCin(const char *statement)const;
+
+	inline char getCharFromCin()const;
 public:
 	Interface(std::string dbFileName) : dbFileName(dbFileName), db(dbFileName) {}
 	void mainMenu(); //main loop
@@ -29,18 +33,21 @@ protected:
 	void invoiceIssueMenu();
 private:
 	inline void receiptIssueMenuSwitch(char choice, bool &end, Receipt &re);
-	inline void invoiceIssueMenuSwitch(char choice, bool &end, Invoice &inv);
+	inline void invoiceIssueMenuSwitch(char choice, bool &end, bool &buyerCreated, Invoice &inv);
 	inline void buyerNotCreated()const;
-	inline bool checkStock(); //check if there is anything in the stock
+	inline bool checkStock()const; //check if there is anything in the stock
 	inline void addItem(Receipt &re); //add item from user to receipt/invoice
+	
+	inline void ShowStock()const;
+	inline void checkItemQuantity(unsigned int index, unsigned int quantity)const;
 	inline void confirmDocument(Receipt &re);
 
 protected:
-	void dailyReport();
+	void dailyReport() { db.dailyRaport(); }
 };
 
 template<typename T>
-inline void Interface::checkCin(T &t)
+inline void Interface::checkAndRepairCin(T &t) const
 {
 	using std::cin;
 
@@ -50,6 +57,16 @@ inline void Interface::checkCin(T &t)
 		std::cout << "Wprowadzono nieprawidlowy format. Wprowadz jeszcze raz: ";
 		cin >> t;
 	}
+}
+
+template<typename T>
+T Interface::getNumberFromCin(const char *statement) const
+{
+	std::cout << statement;
+	T number;
+	std::cin >> number;
+	checkAndRepairCin(number);
+	return number;
 }
 
 #endif // !INTERFACEE_HPP
