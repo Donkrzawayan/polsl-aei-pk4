@@ -28,7 +28,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Party">
-    <Position X="6.25" Y="3.25" Width="1.25" />
+    <Position X="6.25" Y="5" Width="1.25" />
     <TypeIdentifier>
       <HashCode>AEQAAAAAAAAAAAAAACAACAIAAIIEAAAAAQAAAAAAAAI=</HashCode>
       <FileName>party.hpp</FileName>
@@ -53,6 +53,13 @@
     <ShowAsAssociation>
       <Field Name="db" />
     </ShowAsAssociation>
+  </Class>
+  <Class Name="XMLDoc">
+    <Position X="6" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAEEAEAAAAAAAAgIQIICEAAAAAAgAgAAAAgAAAAAAA=</HashCode>
+      <FileName>XMLDoc.hpp</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
