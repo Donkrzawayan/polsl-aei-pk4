@@ -63,7 +63,7 @@ void DataBase::createOwner()
 	owner.createParty();
 }
 
-void DataBase::writeBase(std::string dbFileName)
+void DataBase::sortAndWriteBase(std::string dbFileName)
 {
 	std::sort(stock.begin(), stock.end()); //sort items in stock
 
@@ -96,76 +96,50 @@ inline void DataBase::writeStock(std::ofstream & ofs) const
 		item.write(ofs);
 }
 
-bool DataBase::loadFromXMLInvoice(const std::string & docName)
-{
-	using namespace tinyxml2;
+void DataBase::loadFromXMLInvoice(const std::string & docName) {
+	XMLDoc doc;
+	doc.loadFile(docName.c_str());
 
-	XMLDocument doc;
-
-	XMLError result = doc.LoadFile(docName.c_str());
-	if (result != XML_SUCCESS) return false;
-
-	XMLNode * pRoot = doc.LastChild(); //first is <?xml version="1.0" encoding="UTF-8"?>
-	if (!pRoot) return false;
-
-	XMLElement * pElement = pRoot->FirstChildElement("Pozycje_na_paragonie");
-	if (!pElement) return false; //XML_ERROR_PARSING_ELEMENT
-
-		XMLElement * pItemsElement = pElement->FirstChildElement("Pozycja");
-		while (pItemsElement) {
-			Item temp;
-			bool result = temp.readXML(doc, pItemsElement);
-			if (!result) return false;
-			(*this) += std::move(temp);
-			pItemsElement = pItemsElement->NextSiblingElement("Pozycja");
-		}
-
-	return true;
+	doc.childElement("Pozycje");
+		if (doc.childElement("Pozycja"))
+			do {
+				Item temp;
+				temp.readXML(doc);
+				(*this) += std::move(temp);
+			} while (doc.nextElement("Pozycja"));
 }
 
-bool DataBase::dailyRaport()
-{
-	tinyxml2::XMLDocument doc;
+bool DataBase::dailyRaport() {
+	XMLDoc doc;
+	doc.newDoc("Raport_dobowy");
 
-	tinyxml2::XMLNode *pRoot = doc.NewElement("Raport_dobowy");
+	writeDocumentInfoXML(doc);
+	writePaymentXML(doc);
 
-	doc.InsertFirstChild(pRoot);
-		writeDocumentInfoXML(doc, pRoot);
-		writePaymentXML(doc, pRoot);
-
-	return saveXML(doc);
-}
-
-inline void DataBase::writeDocumentInfoXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLNode * pRoot) const
-{
-	tinyxml2::XMLElement * pElement = doc.NewElement("Informacje_o_dokumencie");
-	helpfulness::addEndElement(doc, "Data_wykonania_raportu_dobowego", helpfulness::date('.').c_str(), pElement);
-	helpfulness::addEndElement(doc, "Godzina_wykonania_wydruku", helpfulness::hour(':').c_str(), pElement);
-	pRoot->InsertEndChild(pElement);
-}
-
-inline void DataBase::writePaymentXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLNode * pRoot) const
-{
-	tinyxml2::XMLElement *pElement = doc.NewElement("Naleznosci");
-	helpfulness::addEndElement(doc, "Laczna_kwota_sprzedazy_brutto", helpfulness::toStringPrecision2(totalPayment).c_str(), pElement);
-	helpfulness::addEndElement(doc, "Laczna_kwota_PTU", helpfulness::toStringPrecision2(totalPTUAmount).c_str(), pElement);
-	helpfulness::addEndElement(doc, "Waluta", "PLN", pElement);
-	pRoot->InsertEndChild(pElement);
-}
-
-inline bool DataBase::saveXML(tinyxml2::XMLDocument & doc)
-{
-	using namespace tinyxml2;
-
-	doc.InsertFirstChild(doc.NewDeclaration()); //add <?xml version="1.0" encoding="UTF-8"?>
-
-	XMLError result = doc.SaveFile(("Raport" + std::move(helpfulness::date()) + ".xml").c_str());
-	if (result == XML_SUCCESS) {
+	bool result = doc.saveXML(("Raport" + std::move(helpfulness::date()) + ".xml").c_str());
+	if (result) {
 		totalPayment = totalPTUAmount = 0.0L; //reset values
 		return true;
 	}
 	else
 		return false;
+}
+
+inline void DataBase::writeDocumentInfoXML(XMLDoc & doc) const
+{
+	doc.addElement("Informacje_o_dokumencie");
+	doc.addElement("Data_wykonania_raportu_dobowego", helpfulness::date('.').c_str());
+	doc.addElement("Godzina_wykonania_wydruku", helpfulness::hour(':').c_str());
+	doc.insertChild();
+}
+
+inline void DataBase::writePaymentXML(XMLDoc & doc) const
+{
+	doc.addElement("Naleznosci");
+	doc.addElement("Laczna_kwota_sprzedazy_brutto", helpfulness::toStringPrecision2(totalPayment).c_str());
+	doc.addElement("Laczna_kwota_PTU", helpfulness::toStringPrecision2(totalPTUAmount).c_str());
+	doc.addElement("Waluta", "PLN");
+	doc.insertChild();
 }
 
 void DataBase::ShowStock() const
@@ -178,19 +152,29 @@ void DataBase::ShowStock() const
 
 	auto width = std::cout.width(); //remember old value
 
-	std::cout << std::right << std::setw(NO_WIDTH) << "lp. ";
-	std::cout << std::left << std::setw(DESCRIPTION_WIDTH) << "Nazwa";
-	std::cout << std::right << std::setw(QTY_WIDTH) << "Ilosc";
-	std::cout << std::right << std::setw(PRICE_WIDTH) << "Cena sprz.";
-	std::cout << std::right << std::setw(VAT_WIDTH) << "VAT";
-	std::cout << "\n";
+	ShowStockHeader(NO_WIDTH, DESCRIPTION_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
 
-	for (size_t i = 0; i < stock.size(); ++i) {
-		std::cout << std::right << std::setw(NO_WIDTH - 2) << (i + 1) << ". "; //index for user
-		stock[i].Show(DESCRIPTION_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
-		std::cout << "\n";
-	}
+	ShowStockContent(NO_WIDTH, DESCRIPTION_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
 
 	std::cout.unsetf(std::ios_base::adjustfield); //set default
 	std::cout.width(width);
+}
+
+void DataBase::ShowStockHeader(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
+{
+	std::cout << std::right << std::setw(noWidth) << "lp. ";
+	std::cout << std::left << std::setw(descriptionWidth) << "Nazwa";
+	std::cout << std::right << std::setw(quantityWidth) << "Ilosc";
+	std::cout << std::right << std::setw(spriceWidth) << "Cena sprz.";
+	std::cout << std::right << std::setw(vatWidth) << "VAT";
+	std::cout << "\n";
+}
+
+void DataBase::ShowStockContent(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
+{
+	for (size_t i = 0; i < stock.size(); ++i) {
+		std::cout << std::right << std::setw(noWidth - 2) << (i + 1) << ". "; //index for user
+		stock[i].Show(descriptionWidth, quantityWidth, spriceWidth, vatWidth);
+		std::cout << "\n";
+	}
 }

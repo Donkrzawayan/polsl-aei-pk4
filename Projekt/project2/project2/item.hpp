@@ -2,8 +2,8 @@
 #define ITEM_HPP
 #include <string>
 #include <iostream> //streamsize
-#include "tinyxml2/tinyxml2.h"
 #include "helpfulness.hpp"
+#include "XMLDoc.hpp"
 
 class Item
 {
@@ -13,8 +13,6 @@ class Item
 	float salesPrice, purchasePrice;
 public:
 	Item() = default;
-	Item(std::string &&description, unsigned int quantity, int vat, float salesPrice, float purchasePrice = 0.0f)
-		: description(description), quantity(quantity), vat(vat), salesPrice(salesPrice), purchasePrice(purchasePrice) {}
 	
 	//getters
 	int getQuantity()const { return quantity; }
@@ -40,11 +38,11 @@ public:
 	void Show(const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth)const;
 	std::istream &read(std::istream & is);
 	std::ostream &write(std::ostream & os)const;
-	void writeXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement)const;
-	void writeNettoXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement)const {
-		helpfulness::addEndElement(doc, "Cena_netto", helpfulness::toStringPrecision2(getNettoPrice()).c_str(), pPrevElement);
+	void writeXML(XMLDoc &doc)const;
+	void writeNettoXML(XMLDoc &doc)const {
+		doc.addElement("Cena_netto", helpfulness::toStringPrecision2(getNettoPrice()).c_str());
 	}
-	bool readXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement);
+	void readXML(XMLDoc &doc);
 };
 
 #endif // !ITEM_HPP

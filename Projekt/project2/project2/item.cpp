@@ -1,7 +1,6 @@
 #include "item.hpp"
 #include <iomanip> //std::setw
-#include "helpfulness.hpp"
-
+#include <utility> //move
 
 void Item::Show(const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
 {
@@ -22,11 +21,7 @@ void Item::Show(const std::streamsize descriptionWidth, const std::streamsize qu
 
 std::istream & Item::read(std::istream & is)
 {
-	size_t size;
-
-	is.read(reinterpret_cast<char *>(&size), sizeof(size));
-	description.resize(size);
-	is.read(reinterpret_cast<char *>(&description[0]), size * sizeof(description[0]));
+	helpfulness::readStringBin(is, description);
 	is.read(reinterpret_cast<char *>(&quantity), sizeof(quantity));
 	is.read(reinterpret_cast<char *>(&vat), sizeof(vat));
 	is.read(reinterpret_cast<char *>(&salesPrice), sizeof(salesPrice));
@@ -37,10 +32,7 @@ std::istream & Item::read(std::istream & is)
 
 std::ostream & Item::write(std::ostream & os) const
 {
-	const size_t size = description.size();
-
-	os.write(reinterpret_cast<const char *>(&size), sizeof(size))
-		.write(description.c_str(), size * sizeof(description[0]));
+	helpfulness::writeStringBin(os, description);
 	os.write(reinterpret_cast<const char *>(&quantity), sizeof(quantity));
 	os.write(reinterpret_cast<const char *>(&vat), sizeof(vat));
 	os.write(reinterpret_cast<const char *>(&salesPrice), sizeof(salesPrice));
@@ -49,35 +41,18 @@ std::ostream & Item::write(std::ostream & os) const
 	return os;
 }
 
-void Item::writeXML(tinyxml2::XMLDocument &doc, tinyxml2::XMLElement * pPrevElement) const
+void Item::writeXML(XMLDoc & doc) const
 {
-	helpfulness::addEndElement(doc, "Nazwa", description.c_str(), pPrevElement);
-	helpfulness::addEndElement(doc, "Ilosc", quantity, pPrevElement);
-	helpfulness::addEndElement(doc, "VAT_proc.", vat, pPrevElement);
-	helpfulness::addEndElement(doc, "Cena_brutto", helpfulness::toStringPrecision2(salesPrice).c_str(), pPrevElement);
+	doc.addElement("Nazwa", description.c_str());
+	doc.addElement("Ilosc", quantity);
+	doc.addElement("VAT_proc.", vat);
+	doc.addElement("Cena_brutto", helpfulness::toStringPrecision2(salesPrice).c_str());
 }
 
-bool Item::readXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement)
+void Item::readXML(XMLDoc & doc)
 {
-	using namespace tinyxml2;
-
-	XMLElement * pElement;
-
-	pElement = pPrevElement->FirstChildElement("Nazwa");
-	if (!pElement) return false; // XML_ERROR_PARSING_ELEMENT;
-	description = pElement->GetText();
-
-	pElement = pPrevElement->FirstChildElement("Ilosc");
-	if (!pElement) return false; // XML_ERROR_PARSING_ELEMENT;
-	pElement->QueryIntText(&quantity);
-
-	pElement = pPrevElement->FirstChildElement("VAT_proc.");
-	if (!pElement) return false; // XML_ERROR_PARSING_ELEMENT;
-	pElement->QueryIntText(&vat);
-
-	pElement = pPrevElement->FirstChildElement("Cena_brutto");
-	if (!pElement) return false; // XML_ERROR_PARSING_ELEMENT;
-	pElement->QueryFloatText(&purchasePrice);
-
-	return true;
+	description = std::move(doc.getText("Nazwa"));
+	quantity = doc.getInt("Ilosc");
+	vat = doc.getInt("VAT_proc.");
+	purchasePrice = doc.getFloat("Cena_brutto");
 }

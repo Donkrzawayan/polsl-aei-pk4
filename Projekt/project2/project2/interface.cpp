@@ -18,10 +18,8 @@ void Interface::mainMenu()
 	}
 }
 
-inline void Interface::mainMenuSwitch(char choice, bool & end)
-{
-	switch (choice)
-	{
+inline void Interface::mainMenuSwitch(char choice, bool & end) {
+	switch (choice)	{
 	case '1':
 		return changeOwnerData();
 	case '2':
@@ -32,11 +30,9 @@ inline void Interface::mainMenuSwitch(char choice, bool & end)
 		return invoiceIssueMenu();
 	case '5':
 		return dailyReport();
-	case EOF:
-		std::cout << "Bledny format danych.\n";
 	case '6':
 		end = true;
-		return db.writeBase(dbFileName);
+		return db.sortAndWriteBase(dbFileName);
 	}
 }
 
@@ -59,11 +55,11 @@ inline void Interface::addFromInvoice()
 	std::cout << "Podaj sciezke z faktura: ";
 	std::getline(std::cin, path);
 
-	bool result = db.loadFromXMLInvoice(path);
-	if (!result) {
+	db.loadFromXMLInvoice(path);
+	/*if (!result) {
 		std::cout << "Nie da sie odczytac z pliku. [ENTER]";
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	}
+	}*/
 }
 
 void Interface::receiptIssueMenu()
@@ -154,6 +150,18 @@ inline bool Interface::checkStock() const
 
 inline void Interface::addItem(Receipt & re)
 {
+	try {
+		addItemFromUser(re);
+	}
+	catch (const std::out_of_range&) {
+		std::cout << "Nie ma takiej pozycji! [ENTER]";
+		std::cin.get();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
+}
+
+inline void Interface::addItemFromUser(Receipt & re)
+{
 	ShowStock();
 
 	unsigned int index = getNumberFromCin<unsigned int>("Indeks pozycji do dodania [0 aby anulowac dodawanie]: ");
@@ -163,19 +171,8 @@ inline void Interface::addItem(Receipt & re)
 
 	unsigned int quantity = getNumberFromCin<unsigned int>("Ilosc: ");
 
-	bool check;
-	try {
-		check = db.checkItem(index, quantity);
-	}
-	catch (const std::out_of_range&) {
-		std::cout << "Nie ma takiej pozycji! [ENTER]";
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		return;
-	}
+	checkAndRepairItemQuantity(index, quantity);
 
-	if(!check)
-		checkItemQuantity(index, quantity);
-	
 	float price = getNumberFromCin<float>("Cena sprzedazy [PLN]: ");
 
 	re.pushItem(db[index], quantity, price);
@@ -196,12 +193,12 @@ inline void Interface::ShowStock() const
 	db.ShowStock();
 }
 
-inline void Interface::checkItemQuantity(unsigned int index, unsigned int quantity) const
+inline void Interface::checkAndRepairItemQuantity(unsigned int index, unsigned int quantity) const
 {
-	do {
+	while (!db.checkItem(index, quantity)) {
 		std::cout << "Nie ma takiej ilosci na stanie\n";
 		quantity = getNumberFromCin<unsigned int>("Wprowadz inna ilosc: ");
-	} while (!db.checkItem(index, quantity));
+	} 
 }
 
 inline void Interface::confirmDocument(Receipt & re)

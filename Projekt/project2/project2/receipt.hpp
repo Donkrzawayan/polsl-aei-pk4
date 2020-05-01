@@ -4,8 +4,7 @@
 #include <vector>
 #include "item.hpp"
 #include <utility> //move
-#include "tinyxml2/tinyxml2.h"
-#include <tuple>
+//#include <tuple> //idea for future?
 
 
 class Receipt //dodac zagniezdzna klase ItemRef
@@ -15,19 +14,6 @@ class Receipt //dodac zagniezdzna klase ItemRef
 	double sum, PTUSum;
 
 	//std::vector<std::tuple<size_t, unsigned int, float>> commodityRefs; //idea for future?
-protected:
-	//writing seller to XML
-	void writeSellerXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pElement)const { owner->writeXML(doc, pElement); }
-
-	//writing items to XML in given way
-	template<typename Function>
-	Function for_eachItem(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pElement, Function fn)const;
-
-	//writing sum to XML
-	void writeSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement)const;
-	void writeNettoSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement)const {
-		helpfulness::addEndElement(doc, "Suma_netto", helpfulness::toStringPrecision2(sum - PTUSum).c_str(), pPrevElement);
-	}
 public:
 	Receipt(const Party *owner) : owner(owner), sum(0.0), PTUSum(0.0) {}
 	virtual ~Receipt() = default;
@@ -47,21 +33,33 @@ public:
 
 	//create XML document
 	virtual bool createDocument()const;
-	inline bool saveXML(tinyxml2::XMLDocument & doc, const char *docName)const;
+protected:
+	void addSellerDataToDocument(XMLDoc & doc)const;
+	void addItemsToDocument(XMLDoc &doc)const;
+	void addSumToDocument(XMLDoc &doc)const;
+
+	//writing seller to XML
+	void writeSellerXML(XMLDoc & doc)const { owner->writeXML(doc); }
+
+	//writing items to XML in given way
+	template<typename Function>
+	Function for_eachItem(XMLDoc & doc, Function fn)const;
+
+	//writing sum to XML
+	void writeSumXML(XMLDoc & doc)const;
+	void writeNettoSumXML(XMLDoc & doc)const {
+		doc.addElement("Suma_netto", helpfulness::toStringPrecision2(sum - PTUSum).c_str());
+	}
 };
 
 template<typename Function>
-inline Function Receipt::for_eachItem(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pElement, Function fn) const
+inline Function Receipt::for_eachItem(XMLDoc & doc, Function fn) const
 {
-	using namespace tinyxml2;
-
-	XMLElement * pItemsElement;
-
 	for (auto item : items)
 	{
-		pItemsElement = doc.NewElement("Pozycja");
-			fn(doc, pItemsElement, item);
-		pElement->InsertEndChild(pItemsElement);
+		doc.addElement("Pozycja");
+		fn(doc, item);
+		doc.insertChild();
 	}
 
 	return std::move(fn);

@@ -7,8 +7,7 @@ class Invoice :	virtual public Receipt
 	Party contractor;
 	unsigned int invoiceNo; //number of invoice
 protected:
-	//writing sum to XML
-	void writeSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement)const;
+	void writeDocInfoXML(XMLDoc & doc)const;
 public:
 	Invoice(const Party *owner, unsigned int invoiceNo) : Receipt(owner), invoiceNo(invoiceNo) {}
 
@@ -17,6 +16,11 @@ public:
 	
 	//create XML document
 	virtual bool createDocument()const override;
+protected:
+	void addDocInfoToDocument(XMLDoc & doc)const;
+	void addBuyerDataToDocument(XMLDoc & doc)const;
+	void addItemsToDocument(XMLDoc &doc)const;
+	void addSumToDocument(XMLDoc &doc)const;
 };
 
 #endif // !INVOICE_HPP

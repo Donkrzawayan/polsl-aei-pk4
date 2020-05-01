@@ -56,19 +56,26 @@ public:
 
 	//show stock to console
 	void ShowStock()const;
+	void ShowStockHeader(const std::streamsize noWidth, const std::streamsize descriptionWidth,	const std::streamsize quantityWidth,
+		const std::streamsize spriceWidth, const std::streamsize vatWidth)const;
+	void ShowStockContent(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth,
+		const std::streamsize spriceWidth, const std::streamsize vatWidth)const;
+
 	//sort and write base to bin
-	void writeBase(std::string dbFileName = "db.bin");
+	void sortAndWriteBase(std::string dbFileName = "db.bin");
 private:
 	//read base from bin; called from constructor
 	void readBase(std::ifstream &ifs);
 	inline void readMonthAndInvoiceNo(std::ifstream &ifs);
 	inline void readStock(std::ifstream &ifs);
+
+	//write base to bin; called from sortAndWriteBase()
 	inline void writeMonthAndInvoiceNo(std::ofstream &ofs)const;
 	inline void writeStock(std::ofstream &ofs)const;
 
 public:
 	//load from file given by parametr
-	bool loadFromXMLInvoice(const std::string &docName);
+	void loadFromXMLInvoice(const std::string &docName);
 
 
 
@@ -78,9 +85,8 @@ public:
 	void addSum(double sum, double PTUSum) { totalPayment += sum, totalPTUAmount += PTUSum; }
 	bool dailyRaport();
 private:
-	inline void writeDocumentInfoXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLNode * pRoot)const;
-	inline void writePaymentXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLNode * pRoot)const;
-	inline bool saveXML(tinyxml2::XMLDocument & doc);
+	inline void writeDocumentInfoXML(XMLDoc & doc)const;
+	inline void writePaymentXML(XMLDoc & doc)const;
 };
 
 template<typename InputIterator>

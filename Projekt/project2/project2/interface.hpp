@@ -22,27 +22,28 @@ public:
 private:
 	inline void mainMenuSwitch(char choice, bool &end);
 
-protected:
+
 	inline void changeOwnerData();
 
-protected:
+
 	inline void addFromInvoice(); //add items from invoice to database
 
-protected:
+
 	void receiptIssueMenu();
 	void invoiceIssueMenu();
-private:
+
 	inline void receiptIssueMenuSwitch(char choice, bool &end, Receipt &re);
 	inline void invoiceIssueMenuSwitch(char choice, bool &end, bool &buyerCreated, Invoice &inv);
 	inline void buyerNotCreated()const;
 	inline bool checkStock()const; //check if there is anything in the stock
 	inline void addItem(Receipt &re); //add item from user to receipt/invoice
+	inline void addItemFromUser(Receipt &re);
 	
 	inline void ShowStock()const;
-	inline void checkItemQuantity(unsigned int index, unsigned int quantity)const;
+	inline void checkAndRepairItemQuantity(unsigned int index, unsigned int quantity)const;
 	inline void confirmDocument(Receipt &re);
 
-protected:
+
 	void dailyReport() { db.dailyRaport(); }
 };
 

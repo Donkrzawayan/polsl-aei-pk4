@@ -3,12 +3,13 @@
 #include <iostream>
 #include <string>
 #include <utility> //move
-#include "helpfulness.hpp"
 
-void Invoice::writeSumXML(tinyxml2::XMLDocument & doc, tinyxml2::XMLElement * pPrevElement) const
+void Invoice::writeDocInfoXML(XMLDoc & doc) const
 {
-	Receipt::writeSumXML(doc, pPrevElement);
-	writeNettoSumXML(doc, pPrevElement);
+	doc.addElement("Nr",
+		("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo))).c_str());
+	doc.addElement("Data_wystawienia", helpfulness::date('.').c_str());
+	doc.addElement("Godzina", helpfulness::hour(':').c_str());
 }
 
 void Invoice::createBuyer()
@@ -17,45 +18,49 @@ void Invoice::createBuyer()
 	contractor.createParty();
 }
 
-bool Invoice::createDocument() const
+bool Invoice::createDocument() const {
+	XMLDoc doc;
+	doc.newDoc("Faktura");
+
+	addDocInfoToDocument(doc);
+	addSellerDataToDocument(doc);
+	addBuyerDataToDocument(doc);
+	addItemsToDocument(doc);
+
+	/*doc.addElement("Suma");
+		writeSumXML(doc);
+	doc.insertChild();*/
+	addSumToDocument(doc);
+
+	return doc.saveXML(("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo)) + ".xml").c_str());
+}
+
+void Invoice::addDocInfoToDocument(XMLDoc & doc) const
 {
-	using namespace tinyxml2;
+	doc.addElement("Informacje_o_dokumencie");
+	writeDocInfoXML(doc);
+	doc.insertChild();
+}
 
-	XMLDocument doc;
+void Invoice::addBuyerDataToDocument(XMLDoc & doc) const
+{
+	doc.addElement("Dane_kupujacego");
+	contractor.writeXML(doc);
+	doc.insertChild();
+}
 
-	XMLNode *pRoot = doc.NewElement("Faktura");
+void Invoice::addItemsToDocument(XMLDoc & doc) const
+{
+	doc.addElement("Pozycje");
+	for_eachItem(doc,
+		[](XMLDoc &doc, const Item &item) { item.writeXML(doc); item.writeNettoXML(doc); });
+	doc.insertChild();
+}
 
-	doc.InsertFirstChild(pRoot);
-	{
-		XMLElement * pElement;
-
-		pElement = doc.NewElement("Informacje_o_dokumencie");
-		{
-			helpfulness::addEndElement(doc, "Nr",
-				("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo))).c_str(),
-				pElement);
-			helpfulness::addEndElement(doc, "Data_wystawienia", helpfulness::date('.').c_str(), pElement);
-			helpfulness::addEndElement(doc, "Godzina", helpfulness::hour(':').c_str(), pElement);
-		}
-		pRoot->InsertEndChild(pElement);
-
-		pElement = doc.NewElement("Dane_sprzedawcy");
-		writeSellerXML(doc, pElement);
-		pRoot->InsertEndChild(pElement);
-
-		pElement = doc.NewElement("Dane_kupujacego");
-			contractor.writeXML(doc, pElement);
-		pRoot->InsertEndChild(pElement);
-
-		pElement = doc.NewElement("Pozycje_na_paragonie");
-		for_eachItem(doc, pElement,
-			[](XMLDocument &doc, XMLElement * pElement, const Item &item) {item.writeXML(doc, pElement); item.writeNettoXML(doc, pElement); });
-		pRoot->InsertEndChild(pElement);
-
-		pElement = doc.NewElement("Suma");
-		writeSumXML(doc, pElement);
-		pRoot->InsertEndChild(pElement);
-	}
-
-	return saveXML(doc, ("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo)) + ".xml").c_str());
+void Invoice::addSumToDocument(XMLDoc & doc) const
+{
+	doc.addElement("Suma");
+	Receipt::writeSumXML(doc);
+	writeNettoSumXML(doc);
+	doc.insertChild();
 }

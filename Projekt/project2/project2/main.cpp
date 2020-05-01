@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	std::string dbName{ "bd.bin" };
 
 	for (int i = 1; i < argc; ++i) {
-		if (std::strcmp(argv[1], "-h") || (std::strcmp(argv[1], "-help")))
+		if (std::strcmp(argv[1], "-h") || (std::strcmp(argv[1], "--help")))
 			help();
 		else if (std::strcmp(argv[1], "-d"))
 			dbName = argv[++i];

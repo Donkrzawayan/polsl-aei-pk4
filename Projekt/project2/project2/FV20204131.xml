@@ -19,7 +19,7 @@
         <Kod_pocz.>42-606</Kod_pocz.>
         <Miasto>Tarnowskie Gory ZABIERZCIE GO</Miasto>
     </Dane_kupujacego>
-    <Pozycje_na_paragonie>
+    <Pozycje>
         <Pozycja>
             <Nazwa>Kebab cienki</Nazwa>
             <Ilosc>2137</Ilosc>
@@ -146,7 +146,7 @@
         <Cena_brutto>18.00</Cena_brutto>
         <Cena_netto>16.67</Cena_netto>
       </Pozycja>
-    </Pozycje_na_paragonie>
+    </Pozycje>
     <Suma>
         <Suma_PLN>2137</Suma_PLN>
         <Suma_PTU>2137</Suma_PTU>
