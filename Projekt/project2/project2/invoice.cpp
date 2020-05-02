@@ -26,10 +26,6 @@ bool Invoice::createDocument() const {
 	addSellerDataToDocument(doc);
 	addBuyerDataToDocument(doc);
 	addItemsToDocument(doc);
-
-	/*doc.addElement("Suma");
-		writeSumXML(doc);
-	doc.insertChild();*/
 	addSumToDocument(doc);
 
 	return doc.saveXML(("FV" + std::move(helpfulness::date()) + std::move(std::to_string(invoiceNo)) + ".xml").c_str());

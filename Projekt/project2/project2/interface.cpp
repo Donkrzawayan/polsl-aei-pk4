@@ -51,15 +51,26 @@ inline void Interface::changeOwnerData()
 
 inline void Interface::addFromInvoice()
 {
+	try {
+		addItemsFromInvoice();
+	}
+	catch (const XMLDoc::XMLException&) {
+		std::cout << "Bledna zawartosc pliku. [ENTER]";
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
+}
+
+inline void Interface::addItemsFromInvoice()
+{
 	std::string path;
 	std::cout << "Podaj sciezke z faktura: ";
 	std::getline(std::cin, path);
 
-	db.loadFromXMLInvoice(path);
-	/*if (!result) {
-		std::cout << "Nie da sie odczytac z pliku. [ENTER]";
+	bool result = db.loadFromXMLInvoice(path);
+	if (!result) {
+		std::cout << "Nie ma takiego pliku lub jest pusty. [ENTER]";
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	}*/
+	}
 }
 
 void Interface::receiptIssueMenu()
@@ -207,4 +218,8 @@ inline void Interface::confirmDocument(Receipt & re)
 	db.addSum(re.getSum(), re.getPTUSum());
 	if (result)
 		db.remove(re.cbegin(), re.cend()); //remove from stock
+	else {
+		std::cout << "Nie udalo sie zapisac pliku. [ENTER]";
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
 }

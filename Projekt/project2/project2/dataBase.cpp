@@ -96,9 +96,10 @@ inline void DataBase::writeStock(std::ofstream & ofs) const
 		item.write(ofs);
 }
 
-void DataBase::loadFromXMLInvoice(const std::string & docName) {
+bool DataBase::loadFromXMLInvoice(const std::string & docName) {
 	XMLDoc doc;
-	doc.loadFile(docName.c_str());
+	bool result = doc.loadFile(docName.c_str());
+	if (!result) return false;
 
 	doc.childElement("Pozycje");
 		if (doc.childElement("Pozycja"))
@@ -107,6 +108,8 @@ void DataBase::loadFromXMLInvoice(const std::string & docName) {
 				temp.readXML(doc);
 				(*this) += std::move(temp);
 			} while (doc.nextElement("Pozycja"));
+
+	return true;
 }
 
 bool DataBase::dailyRaport() {

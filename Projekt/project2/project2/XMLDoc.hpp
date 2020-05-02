@@ -3,6 +3,7 @@
 #include "tinyxml2/tinyxml2.h"
 #include <stack>
 #include <string>
+#include <exception>
 
 class XMLDoc
 {
@@ -22,6 +23,15 @@ public:
 
 	bool saveXML(const char * docName);
 
+
+	class XMLException : std::exception
+	{
+#include <cstring>
+		char msg[80];
+	public:
+		XMLException(const char *message) { strncpy(msg, message, sizeof(msg)); }
+		char const* what() const override { return msg; }
+	};
 
 	bool loadFile(const char *docName);
 

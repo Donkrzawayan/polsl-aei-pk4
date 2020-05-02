@@ -14,7 +14,11 @@ bool XMLDoc::loadFile(const char * docName)
 	using namespace tinyxml2;
 
 	XMLError result = doc.LoadFile(docName);
-	if (result != XML_SUCCESS) return false;
+	if (result != XML_SUCCESS)
+		if (result == XML_ERROR_PARSING_TEXT)
+			throw XMLException("XML_ERROR_PARSING_TEXT");
+		else
+			return false;
 
 	pRoot = doc.LastChild(); //first is <?xml version="1.0" encoding="UTF-8"?>
 	return pRoot ? true : false;
@@ -38,14 +42,16 @@ bool XMLDoc::nextElement(const char * text)
 std::string XMLDoc::getText(const char * text)
 {
 	tinyxml2::XMLElement *pElement = pElements.top()->FirstChildElement(text);
-	//if (!pElement) return false; // XML_ERROR_PARSING_ELEMENT;
+	if (!pElement)
+		throw XMLException("XML_ERROR_PARSING_ELEMENT");
 	return std::string(pElement->GetText());
 }
 
 int XMLDoc::getInt(const char * text)
 {
 	tinyxml2::XMLElement *pElement = pElements.top()->FirstChildElement(text);
-	//if (!pElement) return false; // XML_ERROR_PARSING_ELEMENT;
+	if (!pElement)
+		throw XMLException("XML_ERROR_PARSING_ELEMENT");
 	int temp;
 	pElement->QueryIntText(&temp);
 	return temp;
@@ -54,7 +60,8 @@ int XMLDoc::getInt(const char * text)
 float XMLDoc::getFloat(const char * text)
 {
 	tinyxml2::XMLElement *pElement = pElements.top()->FirstChildElement("Cena_brutto");
-	//if (!pElement) return false; // XML_ERROR_PARSING_ELEMENT;
+	if (!pElement)
+		throw XMLException("XML_ERROR_PARSING_ELEMENT");
 	float temp;
 	pElement->QueryFloatText(&temp);
 	return temp;

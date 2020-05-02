@@ -28,7 +28,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Party">
-    <Position X="6.25" Y="5" Width="1.25" />
+    <Position X="6.25" Y="3.5" Width="1.25" />
     <TypeIdentifier>
       <HashCode>AEQAAAAAAAAAAAAAACAACAIAAIIEAAAAAQAAAAAAAAI=</HashCode>
       <FileName>party.hpp</FileName>
@@ -47,7 +47,7 @@
   <Class Name="Interface">
     <Position X="11" Y="0.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AACgAIARAAIQJgEAAADAIAIAAAAIFAAAAAAAgAACAAA=</HashCode>
+      <HashCode>AACgAIARAAIQJgEAAADAIAIAAAAIFAAAAAIAgAACAAA=</HashCode>
       <FileName>interface.hpp</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -55,7 +55,17 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="XMLDoc">
-    <Position X="6" Y="0.75" Width="1.5" />
+    <Position X="13.5" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="XMLDoc::XMLException">
+        <TypeIdentifier>
+          <NewMemberFileName>XMLDoc.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AIAEEAEAAAAAAAAgIQIICEAAAAAAgAgAAAAgAAAAAAA=</HashCode>
       <FileName>XMLDoc.hpp</FileName>

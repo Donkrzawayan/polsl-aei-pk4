@@ -27,6 +27,7 @@ private:
 
 
 	inline void addFromInvoice(); //add items from invoice to database
+	inline void addItemsFromInvoice();
 
 
 	void receiptIssueMenu();

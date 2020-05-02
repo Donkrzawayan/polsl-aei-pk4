@@ -75,7 +75,7 @@ private:
 
 public:
 	//load from file given by parametr
-	void loadFromXMLInvoice(const std::string &docName);
+	bool loadFromXMLInvoice(const std::string &docName);
 
 
 
