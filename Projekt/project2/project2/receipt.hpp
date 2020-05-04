@@ -4,16 +4,12 @@
 #include <vector>
 #include "item.hpp"
 #include <utility> //move
-//#include <tuple> //idea for future?
 
-
-class Receipt //dodac zagniezdzna klase ItemRef
+class Receipt
 {
 	const Party *owner; //const pointer to owner data
 	std::vector<Item> items;
 	double sum, PTUSum;
-
-	//std::vector<std::tuple<size_t, unsigned int, float>> commodityRefs; //idea for future?
 public:
 	Receipt(const Party *owner) : owner(owner), sum(0.0), PTUSum(0.0) {}
 	virtual ~Receipt() = default;
@@ -28,8 +24,6 @@ public:
 	//const_iterator for items forwarding
 	auto cbegin() { return items.cbegin(); }
 	auto cend() { return items.cend(); }
-
-	//void pushItem(std::tuple<size_t, unsigned int, float> &&commodityRef) { commodityRefs.push_back(std::move(commodityRef)); } //idea for future? cont
 
 	//create XML document
 	virtual bool createDocument()const;

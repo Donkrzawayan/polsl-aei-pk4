@@ -28,8 +28,7 @@ std::string helpfulness::hour(const char delim)
 	return std::move(hour);
 }
 
-std::istream & helpfulness::readStringBin(std::istream & is, std::string & str)
-{
+std::istream & helpfulness::readStringBin(std::istream & is, std::string & str) {
 	size_t size;
 
 	is.read(reinterpret_cast<char *>(&size), sizeof(size));
@@ -43,6 +42,6 @@ std::ostream & helpfulness::writeStringBin(std::ostream & os, const std::string 
 {
 	const size_t size = str.size() + 1U;
 
-	return os.write(reinterpret_cast<const char *>(&size), sizeof(size))
-		.write(str.c_str(), size * sizeof(str[0]));
+	os.write(reinterpret_cast<const char *>(&size), sizeof(size));
+	return os.write(str.c_str(), size * sizeof(str[0]));
 }

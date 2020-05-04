@@ -11,14 +11,14 @@ class XMLDoc
 	tinyxml2::XMLNode *pRoot;
 	std::stack<tinyxml2::XMLElement *> pElements;
 public:
-	XMLDoc() : doc(), pRoot(nullptr), pElements() {}
+	XMLDoc() : doc(), pRoot(nullptr) {}
 
 
 	void newDoc(const char *name);
 
 	template <typename T>
 	void addElement(const char *TextNewElement, const T SetText);
-	void addElement(const char *TextNewElement) { pElements.push(doc.NewElement(TextNewElement)); } //need insertChild after
+	void addElement(const char *TextNewElement) { if (pRoot) pElements.push(doc.NewElement(TextNewElement)); } //need insertChild after
 	void insertChild();
 
 	bool saveXML(const char * docName);
@@ -37,9 +37,9 @@ public:
 
 	bool childElement(const char * text);
 	bool nextElement(const char * text);
-	std::string getText(const char * text);
-	int getInt(const char * text);
-	float getFloat(const char * text);
+	std::string getText(const char * text)const;
+	int getInt(const char * text)const;
+	float getFloat(const char * text)const;
 };
 
 template<typename T>

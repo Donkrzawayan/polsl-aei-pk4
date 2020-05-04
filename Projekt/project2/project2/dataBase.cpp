@@ -50,6 +50,7 @@ DataBase::DataBase(std::string dbFileName): totalPayment(0.0L), totalPTUAmount(0
 			<< "Wprowadz dane wlasciciela\n"
 			<< "Dane Twojej firmy\n";
 		createOwner();
+		invoiceNo = 1U;
 	}
 	else {
 		readBase(ifs);

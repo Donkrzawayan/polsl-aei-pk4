@@ -3,10 +3,8 @@
 
 void XMLDoc::newDoc(const char * name)
 {
-	if (!pRoot) {
-		pRoot = doc.NewElement(name);
-		doc.InsertFirstChild(pRoot);
-	}
+	pRoot = doc.NewElement(name);
+	doc.InsertFirstChild(pRoot);
 }
 
 bool XMLDoc::loadFile(const char * docName)
@@ -39,7 +37,7 @@ bool XMLDoc::nextElement(const char * text)
 	return pElements.top() ? true : false;
 }
 
-std::string XMLDoc::getText(const char * text)
+std::string XMLDoc::getText(const char * text) const
 {
 	tinyxml2::XMLElement *pElement = pElements.top()->FirstChildElement(text);
 	if (!pElement)
@@ -47,7 +45,7 @@ std::string XMLDoc::getText(const char * text)
 	return std::string(pElement->GetText());
 }
 
-int XMLDoc::getInt(const char * text)
+int XMLDoc::getInt(const char * text) const
 {
 	tinyxml2::XMLElement *pElement = pElements.top()->FirstChildElement(text);
 	if (!pElement)
@@ -57,7 +55,7 @@ int XMLDoc::getInt(const char * text)
 	return temp;
 }
 
-float XMLDoc::getFloat(const char * text)
+float XMLDoc::getFloat(const char * text) const
 {
 	tinyxml2::XMLElement *pElement = pElements.top()->FirstChildElement("Cena_brutto");
 	if (!pElement)

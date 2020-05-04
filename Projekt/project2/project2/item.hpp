@@ -22,7 +22,7 @@ public:
 	int getVAT()const { return vat; }
 
 	//setters
-	void setQuantity(unsigned int qty) { quantity = qty; }
+	void setSaleData(unsigned int qty, float sprice) { quantity = qty; salesPrice = sprice; }
 	void setPurchasePrice(float pprice) { purchasePrice = pprice; }
 	void setSalesPrice(float sprice) { salesPrice = sprice; }
 

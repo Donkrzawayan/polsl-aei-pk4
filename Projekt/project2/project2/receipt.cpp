@@ -10,8 +10,7 @@ void Receipt::writeSumXML(XMLDoc & doc) const
 void Receipt::pushItem(const Item & c, unsigned int quantity, float price)
 {
 	items.push_back(c);
-	items.back().setQuantity(quantity);
-	items.back().setSalesPrice(price);
+	items.back().setSaleData(quantity, price);
 	sum += quantity * price;
 	PTUSum += (items.back().getSalesPrice() - items.back().getNettoPrice()) * quantity;
 }

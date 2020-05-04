@@ -49,7 +49,7 @@ private:
 };
 
 template<typename T>
-inline void Interface::checkAndRepairCin(T &t) const
+void Interface::checkAndRepairCin(T &t) const
 {
 	using std::cin;
 
