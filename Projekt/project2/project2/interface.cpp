@@ -32,7 +32,7 @@ inline void Interface::mainMenuSwitch(char choice, bool & end) {
 		return dailyReport();
 	case '6':
 		end = true;
-		return db.sortAndWriteBase(dbFileName);
+		return dmngr.sortAndWriteBase(dFileName);
 	}
 }
 
@@ -41,12 +41,12 @@ inline void Interface::changeOwnerData()
 	ClearScreen();
 	std::cout << menusStrings::logo << "Dane Twojej firmy\n"
 		<< "Obecne dane:\n"
-		<< (*db.pOwner())
+		<< (*dmngr.pOwner())
 		<< "Zmienic? [T/n]: ";
 	char choice = getCharFromCin();
 
 	if (choice == 'T' || choice == 't')
-		db.createOwner();
+		dmngr.createOwner();
 }
 
 inline void Interface::addFromInvoice()
@@ -66,7 +66,7 @@ inline void Interface::addItemsFromInvoice()
 	std::cout << "Podaj sciezke z faktura: ";
 	std::getline(std::cin, path);
 
-	bool result = db.loadFromXMLInvoice(path);
+	bool result = dmngr.loadFromXMLInvoice(path);
 	if (!result) {
 		std::cout << "Nie ma takiego pliku lub jest pusty. [ENTER]";
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -78,7 +78,7 @@ void Interface::receiptIssueMenu()
 	bool result = checkStock();
 	if (!result) return;
 
-	Receipt re(db.pOwner());
+	Receipt re(dmngr.pOwner());
 
 	bool end = false;
 	while (!end) {
@@ -96,7 +96,7 @@ void Interface::invoiceIssueMenu()
 	bool result = checkStock();
 	if (!result) return;
 
-	Invoice inv(db.pOwner(), db.getInvoiceNo());
+	Invoice inv(dmngr.pOwner(), dmngr.getInvoiceNo());
 
 	bool end = false;
 	bool buyerCreated = false;
@@ -148,7 +148,7 @@ inline void Interface::buyerNotCreated() const
 
 inline bool Interface::checkStock() const
 {
-	bool result = db.checkStock();
+	bool result = dmngr.checkStock();
 	if (!result) {
 		std::cout << "Brak towaru/uslug na stanie.\n"
 			<< "Umiesc towar, aby moc go sprzedac. [ENTER]";
@@ -186,7 +186,7 @@ inline void Interface::addItemFromUser(Receipt & re)
 
 	float price = getNumberFromCin<float>("Cena sprzedazy [PLN]: ");
 
-	re.pushItem(db[index], quantity, price);
+	re.pushItem(dmngr[index], quantity, price);
 }
 
 inline char Interface::getCharFromCin() const
@@ -201,12 +201,12 @@ inline void Interface::ShowStock() const
 {
 	ClearScreen();
 	std::cout << "Stan:\n";
-	db.ShowStock();
+	dmngr.ShowStock();
 }
 
 inline void Interface::checkAndRepairItemQuantity(unsigned int index, unsigned int quantity) const
 {
-	while (!db.checkItem(index, quantity)) {
+	while (!dmngr.checkItem(index, quantity)) {
 		std::cout << "Nie ma takiej ilosci na stanie\n";
 		quantity = getNumberFromCin<unsigned int>("Wprowadz inna ilosc: ");
 	} 
@@ -215,9 +215,9 @@ inline void Interface::checkAndRepairItemQuantity(unsigned int index, unsigned i
 inline void Interface::confirmDocument(Receipt & re)
 {
 	bool result = re.createDocument();
-	db.addSum(re.getSum(), re.getPTUSum());
+	dmngr.addSum(re.getSum(), re.getPTUSum());
 	if (result)
-		db.remove(re.cbegin(), re.cend()); //remove from stock
+		dmngr.remove(re.cbegin(), re.cend()); //remove from stock
 	else {
 		std::cout << "Nie udalo sie zapisac pliku. [ENTER]";
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

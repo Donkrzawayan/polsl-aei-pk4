@@ -1,12 +1,12 @@
-#ifndef DATABASE_HPP
-#define DATABASE_HPP
+#ifndef DATAMANAGER_HPP
+#define DATAMANAGER_HPP
 #include <iostream>
 #include "party.hpp"
 #include <vector>
 #include "item.hpp"
 #include <algorithm> //sort find
 
-class DataBase
+class DataManager
 {
 private:
 	using Items = std::vector<Item>;
@@ -20,9 +20,9 @@ private:
 	long double totalPTUAmount;
 private:
 	//adding items to base; called from loadFromInvoice
-	DataBase &operator+=(Item &&c);
+	DataManager &operator+=(Item &&c);
 public:
-	DataBase(std::string dbFileName = "db.bin");
+	DataManager(std::string dbFileName = "db.bin");
 
 
 	//owner operations
@@ -90,7 +90,7 @@ private:
 };
 
 template<typename InputIterator>
-inline void DataBase::remove(InputIterator first, InputIterator last)
+inline void DataManager::remove(InputIterator first, InputIterator last)
 {
 	while (first != last) {
 		auto it = std::find(stock.begin(), stock.end(), *first);

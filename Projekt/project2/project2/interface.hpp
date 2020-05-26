@@ -1,13 +1,13 @@
 #ifndef INTERFACEE_HPP
 #define INTERFACE_HPP
 #include <string>
-#include "dataBase.hpp"
+#include "dataManager.hpp"
 #include "invoice.hpp"
 
 class Interface
 {
-	std::string dbFileName;
-	DataBase db;
+	std::string dFileName;
+	DataManager dmngr;
 private:
 	template<typename T>
 	void checkAndRepairCin(T &t)const;
@@ -17,7 +17,7 @@ private:
 
 	inline char getCharFromCin()const;
 public:
-	Interface(std::string dbFileName) : dbFileName(dbFileName), db(dbFileName) {}
+	Interface(std::string dFileName) : dFileName(dFileName), dmngr(dFileName) {}
 	void mainMenu(); //main loop
 private:
 	inline void mainMenuSwitch(char choice, bool &end);
@@ -45,7 +45,7 @@ private:
 	inline void confirmDocument(Receipt &re);
 
 
-	void dailyReport() { db.dailyRaport(); }
+	void dailyReport() { dmngr.dailyRaport(); }
 };
 
 template<typename T>

@@ -157,7 +157,7 @@
   <ItemGroup>
     <ClCompile Include="helpfulness.cpp" />
     <ClCompile Include="item.cpp" />
-    <ClCompile Include="dataBase.cpp" />
+    <ClCompile Include="dataManager.cpp" />
     <ClCompile Include="interface.cpp" />
     <ClCompile Include="invoice.cpp" />
     <ClCompile Include="party.cpp" />
@@ -173,7 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="item.hpp" />
-    <ClInclude Include="dataBase.hpp" />
+    <ClInclude Include="dataManager.hpp" />
     <ClInclude Include="helpfulness.hpp" />
     <ClInclude Include="interface.hpp" />
     <ClInclude Include="invoice.hpp" />

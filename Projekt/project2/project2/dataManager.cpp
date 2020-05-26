@@ -1,17 +1,17 @@
-#include "dataBase.hpp"
+#include "dataManager.hpp"
 #include <fstream>
 #include <iomanip> //std::setw
 #include <ctime>
 #include "helpfulness.hpp"
 
-void DataBase::readBase(std::ifstream &ifs)
+void DataManager::readBase(std::ifstream &ifs)
 {
 	owner.read(ifs);
 	readMonthAndInvoiceNo(ifs);
 	readStock(ifs);
 }
 
-inline void DataBase::readMonthAndInvoiceNo(std::ifstream & ifs)
+inline void DataManager::readMonthAndInvoiceNo(std::ifstream & ifs)
 {
 	int month;
 	ifs.read(reinterpret_cast<char *>(&month), sizeof(month));
@@ -22,7 +22,7 @@ inline void DataBase::readMonthAndInvoiceNo(std::ifstream & ifs)
 	if (month != localtime(&t)->tm_mon) invoiceNo = 1U;
 }
 
-inline void DataBase::readStock(std::ifstream & ifs)
+inline void DataManager::readStock(std::ifstream & ifs)
 {
 	size_t size;
 	ifs.read(reinterpret_cast<char *>(&size), sizeof(size));
@@ -31,7 +31,7 @@ inline void DataBase::readStock(std::ifstream & ifs)
 		item.read(ifs);
 }
 
-DataBase &DataBase::operator+=(Item &&c) {
+DataManager &DataManager::operator+=(Item &&c) {
 	auto it = std::find(stock.begin(), stock.end(), c);
 	if (it != stock.end()) {
 		(*it) += c.getQuantity();
@@ -42,7 +42,7 @@ DataBase &DataBase::operator+=(Item &&c) {
 	return *this;
 }
 
-DataBase::DataBase(std::string dbFileName): totalPayment(0.0L), totalPTUAmount(0.0L)
+DataManager::DataManager(std::string dbFileName): totalPayment(0.0L), totalPTUAmount(0.0L)
 {
 	std::ifstream ifs(dbFileName.c_str(), std::ios::binary | std::ios::in);
 	if (!ifs.is_open()){ //first use
@@ -58,13 +58,13 @@ DataBase::DataBase(std::string dbFileName): totalPayment(0.0L), totalPTUAmount(0
 	}
 }
 
-void DataBase::createOwner()
+void DataManager::createOwner()
 {
 	std::cout << "Enter konczy wczytywanie danej pozycji. \n";
 	owner.createParty();
 }
 
-void DataBase::sortAndWriteBase(std::string dbFileName)
+void DataManager::sortAndWriteBase(std::string dbFileName)
 {
 	std::sort(stock.begin(), stock.end()); //sort items in stock
 
@@ -80,7 +80,7 @@ void DataBase::sortAndWriteBase(std::string dbFileName)
 	}
 }
 
-inline void DataBase::writeMonthAndInvoiceNo(std::ofstream & ofs) const
+inline void DataManager::writeMonthAndInvoiceNo(std::ofstream & ofs) const
 {
 	const time_t t = time(NULL);
 	int month = localtime(&t)->tm_mon;
@@ -88,7 +88,7 @@ inline void DataBase::writeMonthAndInvoiceNo(std::ofstream & ofs) const
 	ofs.write(reinterpret_cast<const char *>(&invoiceNo), sizeof(invoiceNo));
 }
 
-inline void DataBase::writeStock(std::ofstream & ofs) const
+inline void DataManager::writeStock(std::ofstream & ofs) const
 {
 	const size_t size = stock.size();
 
@@ -97,7 +97,7 @@ inline void DataBase::writeStock(std::ofstream & ofs) const
 		item.write(ofs);
 }
 
-bool DataBase::loadFromXMLInvoice(const std::string & docName) {
+bool DataManager::loadFromXMLInvoice(const std::string & docName) {
 	XMLDoc doc;
 	bool result = doc.loadFile(docName.c_str());
 	if (!result) return false;
@@ -113,7 +113,7 @@ bool DataBase::loadFromXMLInvoice(const std::string & docName) {
 	return true;
 }
 
-bool DataBase::dailyRaport() {
+bool DataManager::dailyRaport() {
 	XMLDoc doc;
 	doc.newDoc("Raport_dobowy");
 
@@ -129,7 +129,7 @@ bool DataBase::dailyRaport() {
 		return false;
 }
 
-inline void DataBase::writeDocumentInfoXML(XMLDoc & doc) const
+inline void DataManager::writeDocumentInfoXML(XMLDoc & doc) const
 {
 	doc.addElement("Informacje_o_dokumencie");
 	doc.addElement("Data_wykonania_raportu_dobowego", helpfulness::date('.').c_str());
@@ -137,7 +137,7 @@ inline void DataBase::writeDocumentInfoXML(XMLDoc & doc) const
 	doc.insertChild();
 }
 
-inline void DataBase::writePaymentXML(XMLDoc & doc) const
+inline void DataManager::writePaymentXML(XMLDoc & doc) const
 {
 	doc.addElement("Naleznosci");
 	doc.addElement("Laczna_kwota_sprzedazy_brutto", helpfulness::toStringPrecision2(totalPayment).c_str());
@@ -146,7 +146,7 @@ inline void DataBase::writePaymentXML(XMLDoc & doc) const
 	doc.insertChild();
 }
 
-void DataBase::ShowStock() const
+void DataManager::ShowStock() const
 {
 	constexpr std::streamsize NO_WIDTH = 5;
 	constexpr std::streamsize DESCRIPTION_WIDTH = 56;
@@ -164,7 +164,7 @@ void DataBase::ShowStock() const
 	std::cout.width(width);
 }
 
-void DataBase::ShowStockHeader(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
+void DataManager::ShowStockHeader(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
 {
 	std::cout << std::right << std::setw(noWidth) << "lp. ";
 	std::cout << std::left << std::setw(descriptionWidth) << "Nazwa";
@@ -174,7 +174,7 @@ void DataBase::ShowStockHeader(const std::streamsize noWidth, const std::streams
 	std::cout << "\n";
 }
 
-void DataBase::ShowStockContent(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
+void DataManager::ShowStockContent(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
 {
 	for (size_t i = 0; i < stock.size(); ++i) {
 		std::cout << std::right << std::setw(noWidth - 2) << (i + 1) << ". "; //index for user
