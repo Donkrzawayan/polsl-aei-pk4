@@ -1,3 +1,4 @@
+/** @file */
 #ifndef WINDOWSFUNCTIONS_H
 #define WINDOWSFUNCTIONS_H
 
@@ -5,6 +6,7 @@
 extern "C" {
 #endif
 
+/// Clear CMD or console screen
 void ClearScreen(void);
 
 #ifdef __cplusplus

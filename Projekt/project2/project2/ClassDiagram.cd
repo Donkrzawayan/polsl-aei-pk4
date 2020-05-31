@@ -3,19 +3,9 @@
   <Class Name="Item">
     <Position X="1.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BABAAMIEAAIAAEAAJCQAAQIGAAAEAGCAAQAAAAAAAAA=</HashCode>
+      <HashCode>BABAAMIEAAIAAEAAJCQAAQIGAAAEAECBAQAAAAAAAAA=</HashCode>
       <FileName>item.hpp</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="DataBase">
-    <Position X="8.25" Y="0.75" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AQAAAIAQBABAgAAEBAoACQKIAAEAAMgAIQgAIACAAEA=</HashCode>
-      <FileName>dataBase.hpp</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="owner" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="Invoice">
     <Position X="3.25" Y="5.75" Width="2" />
@@ -28,7 +18,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Party">
-    <Position X="6.25" Y="3.5" Width="1.25" />
+    <Position X="6.25" Y="3.25" Width="1.25" />
     <TypeIdentifier>
       <HashCode>AEQAAAAAAAAAAAAAACAACAIAAIIEAAAAAQAAAAAAAAI=</HashCode>
       <FileName>party.hpp</FileName>
@@ -45,13 +35,13 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Interface">
-    <Position X="11" Y="0.75" Width="2" />
+    <Position X="11.25" Y="0.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AACgAIARAAIQJgEAAADAIAIAAAAIFAAAAAIAgAACAAA=</HashCode>
+      <HashCode>AACAAIARAAIAJgEAAADAIAIAAAAIFAAAAAIAoAADAAA=</HashCode>
       <FileName>interface.hpp</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="db" />
+      <Field Name="dmngr" />
     </ShowAsAssociation>
   </Class>
   <Class Name="XMLDoc">
@@ -70,6 +60,16 @@
       <HashCode>AIAEEAEAAAAAAAAgIQIICEAAAAAAgAgAAAAgAAAAAAA=</HashCode>
       <FileName>XMLDoc.hpp</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="DataManager">
+    <Position X="8.25" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQAAAIAQBABAgAAEBAoACQKoAAEAAMgAIQgAIACAAEA=</HashCode>
+      <FileName>dataManager.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="owner" />
+    </ShowAsAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

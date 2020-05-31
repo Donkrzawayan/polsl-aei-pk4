@@ -3,8 +3,13 @@
 #include <iomanip> // setprecision
 #include <sstream> // stringstream
 
+/**
+ @namespace helpfulness
+ @brief Useful functions
+ */
 namespace helpfulness
 {
+	/// Convert numerical value to string with setprecision(2)
 	template<typename T>
 	std::string toStringPrecision2(T input) {
 		std::stringstream ss;
@@ -12,8 +17,15 @@ namespace helpfulness
 		return ss.str();
 	}
 
-	//return date and time as a string; delim deliminate numbers
+	/**
+	 @return date as a string
+	 @param delim deliminate numbers
+	 */
 	std::string date(const char delim = '\0');
+	/**
+	 @return hour as a string
+	 @param delim deliminate numbers
+	 */
 	std::string hour(const char delim = '\0');
 
 	std::istream &readStringBin(std::istream & is, std::string &str);

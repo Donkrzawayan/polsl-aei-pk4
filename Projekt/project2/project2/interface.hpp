@@ -4,6 +4,7 @@
 #include "dataManager.hpp"
 #include "invoice.hpp"
 
+/// Creates interface for user
 class Interface
 {
 	std::string dFileName;
@@ -17,8 +18,9 @@ private:
 
 	inline char getCharFromCin()const;
 public:
+	/** @param dFileName name of file with user data */
 	Interface(std::string dFileName) : dFileName(dFileName), dmngr(dFileName) {}
-	void mainMenu(); //main loop
+	void mainMenu(); ///< main loop
 private:
 	inline void mainMenuSwitch(char choice, bool &end);
 
@@ -26,18 +28,18 @@ private:
 	inline void changeOwnerData();
 
 
-	inline void addFromInvoice(); //add items from invoice to database
+	inline void addFromInvoice(); ///< Add items from invoice to dataManager
 	inline void addItemsFromInvoice();
 
 
-	void receiptIssueMenu();
-	void invoiceIssueMenu();
+	void receiptIssueMenu(); ///< Receipt menu
+	void invoiceIssueMenu(); ///< Invoice menu
 
 	inline void receiptIssueMenuSwitch(char choice, bool &end, Receipt &re);
 	inline void invoiceIssueMenuSwitch(char choice, bool &end, bool &buyerCreated, Invoice &inv);
 	inline void buyerNotCreated()const;
-	inline bool checkStock()const; //check if there is anything in the stock
-	inline void addItem(Receipt &re); //add item from user to receipt/invoice
+	inline bool checkStock()const; ///< Check if there is anything in the stock
+	inline void addItem(Receipt &re); ///< Add chosen by user item from dataManager to receipt/invoice
 	inline void addItemFromUser(Receipt &re);
 	
 	inline void ShowStock()const;

@@ -5,12 +5,14 @@
 #include "item.hpp"
 #include <utility> //move
 
+/// Class with receipt data
 class Receipt
 {
-	const Party *owner; //const pointer to owner data
+	const Party *owner; ///< Const pointer to owner data
 	std::vector<Item> items;
 	double sum, PTUSum;
 public:
+	/** @param owner pointer to owner data */
 	Receipt(const Party *owner) : owner(owner), sum(0.0), PTUSum(0.0) {}
 	virtual ~Receipt() = default;
 
@@ -18,28 +20,31 @@ public:
 	double getSum() { return sum; }
 	double getPTUSum() { return PTUSum; }
 
-	//push item to items
-	void pushItem(const Item &c, unsigned int quantity, float price);
+	/// Push item to items
+	void pushItem(const Item &item, unsigned int quantity, float price);
 
-	//const_iterator for items forwarding
+	/// const_iterator for items forwarding
 	auto cbegin() { return items.cbegin(); }
+	/// const_iterator for items forwarding
 	auto cend() { return items.cend(); }
 
-	//create XML document
+	/// Create XML document
 	virtual bool createDocument()const;
 protected:
 	void addSellerDataToDocument(XMLDoc & doc)const;
 	void addItemsToDocument(XMLDoc &doc)const;
 	void addSumToDocument(XMLDoc &doc)const;
 
-	//writing seller to XML
+	/// Writing seller to XML
 	void writeSellerXML(XMLDoc & doc)const { owner->writeXML(doc); }
 
-	//writing items to XML in given way
+	/** @brief Apply writing type Items to XML
+	 @return fn
+	*/
 	template<typename Function>
 	Function for_eachItem(XMLDoc & doc, Function fn)const;
 
-	//writing sum to XML
+	/// Writing sum to XML
 	void writeSumXML(XMLDoc & doc)const;
 	void writeNettoSumXML(XMLDoc & doc)const {
 		doc.addElement("Suma_netto", helpfulness::toStringPrecision2(sum - PTUSum).c_str());

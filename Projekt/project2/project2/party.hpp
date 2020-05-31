@@ -3,13 +3,14 @@
 #include <string>
 #include "XMLDoc.hpp"
 
+/// Class with party data
 class Party
 {
 	std::string name, NIP, address, postcode, city;
 public:
 	Party() = default;
 
-	//set all members from user
+	/// Set all members from user
 	void createParty();
 
 	//reading, showing, writing

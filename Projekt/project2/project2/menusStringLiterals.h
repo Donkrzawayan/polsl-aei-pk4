@@ -1,7 +1,12 @@
-#ifndef MENUSSTRINGLITERALS_H
+﻿#ifndef MENUSSTRINGLITERALS_H
 #define MENUSSTRINGLITERALS_H
 
+/**
+ @namespace menusStrings
+ @brief String literals for program menus
+ */
 namespace menusStrings {
+	/// TinyBusiness logo
 	constexpr const char *logo =
 		" _____  _            _____            _                     \n"
 		"|_   _||_| ___  _ _ | __  | _ _  ___ |_| ___  ___  ___  ___ \n"
@@ -10,6 +15,7 @@ namespace menusStrings {
 		"               |___|                                        \n"
 		"____________________________________________________________________________________________________________\n";
 
+	/// Main menu options
 	constexpr const char *mainMenu =
 		"MENU GLOWNE\n"
 		"--------------------------------------\n"
@@ -21,6 +27,7 @@ namespace menusStrings {
 		"6. Zakoncz prace programu.\n"
 		"--------------------------------------\n";
 
+	/// Receipt menu options
 	constexpr const char *receiptMenu =
 		"MENU WYSTAWIANIA PARAGONU\n"
 		"--------------------------------------\n"
@@ -29,6 +36,7 @@ namespace menusStrings {
 		"3. Anuluj wystawianie paragonu.\n"
 		"--------------------------------------\n";
 
+	/// Invoice menu options
 	constexpr const char *invoiceMenu =
 		"MENU WYSTAWIANIA FAKTURY\n"
 		"--------------------------------------\n"

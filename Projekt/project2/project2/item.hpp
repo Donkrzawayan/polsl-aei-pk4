@@ -5,12 +5,13 @@
 #include "helpfulness.hpp"
 #include "XMLDoc.hpp"
 
+/// Selling item data
 class Item
 {
-	std::string description;
+	std::string description; ///< Description of Item
 	int quantity;
 	int vat;
-	float salesPrice, purchasePrice;
+	float salesPrice, purchasePrice; ///< Brutto prices
 public:
 	Item() = default;
 	
@@ -22,9 +23,9 @@ public:
 	int getVAT()const { return vat; }
 
 	//setters
-	void setSaleData(unsigned int qty, float sprice) { quantity = qty; salesPrice = sprice; }
-	void setPurchasePrice(float pprice) { purchasePrice = pprice; }
-	void setSalesPrice(float sprice) { salesPrice = sprice; }
+	void setSaleData(unsigned int qty, float sPrice) { quantity = qty; salesPrice = sPrice; }
+	void setPurchasePrice(float pPrice) { purchasePrice = pPrice; }
+	void setSalesPrice(float sPrice) { salesPrice = sPrice; }
 
 	//relational operators
 	friend bool operator==(const Item &i1, const Item &i2) { return (i1.description == i2.description && i1.vat == i2.vat); }

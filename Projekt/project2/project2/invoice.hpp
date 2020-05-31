@@ -2,19 +2,24 @@
 #define INVOICE_HPP
 #include "receipt.hpp"
 
+/// Class with invoice data
 class Invoice :	virtual public Receipt
 {
 	Party contractor;
-	unsigned int invoiceNo; //number of invoice
+	unsigned int invoiceNo; ///< Number of invoice
 protected:
 	void writeDocInfoXML(XMLDoc & doc)const;
 public:
+	/**
+	 @param owner pointer to owner data
+	 @param invoiceNo number of invoice
+	 */
 	Invoice(const Party *owner, unsigned int invoiceNo) : Receipt(owner), invoiceNo(invoiceNo) {}
 
-	//set contractor from user
+	/// Set contractor from user
 	void createBuyer();
 	
-	//create XML document
+	/// Create XML document
 	virtual bool createDocument()const override;
 protected:
 	void addDocInfoToDocument(XMLDoc & doc)const;
