@@ -17,10 +17,22 @@ public:
 
 	void newDoc(const char *name);
 
+	/// See addElement(const char *TextNewElement)
 	template <typename T>
 	void addElement(const char *TextNewElement, const T SetText);
-	/** @attention need insertChild after and void addElement(const char *TextNewElement, const T SetText) between */
+
+	/**
+	 @attention Need insertChild() after and some addElement(const char *TextNewElement, const T SetText) between.
+	 Example:
+	 @code{.cpp}
+	 XML::addElement("Suma");
+		 XML::addElement("Suma_PLN", "21.37");
+	 XML::insertChild();
+	 @endcode
+	*/
 	void addElement(const char *TextNewElement) { if (pRoot) pElements.push(doc.NewElement(TextNewElement)); }
+
+	/// See addElement(const char *TextNewElement)
 	void insertChild();
 
 	bool saveXML(const char * docName);
