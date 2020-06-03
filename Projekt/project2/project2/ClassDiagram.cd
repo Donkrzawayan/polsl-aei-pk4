@@ -18,7 +18,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Party">
-    <Position X="6.25" Y="3.25" Width="1.25" />
+    <Position X="6.25" Y="3.5" Width="1.25" />
     <TypeIdentifier>
       <HashCode>AEQAAAAAAAAAAAAAACAACAIAAIIEAAAAAQAAAAAAAAI=</HashCode>
       <FileName>party.hpp</FileName>
@@ -64,12 +64,20 @@
   <Class Name="DataManager">
     <Position X="8.25" Y="0.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AQAAAIAQBABAgAAEBAoACQKoAAEAAMgAIQgAIACAAEA=</HashCode>
+      <HashCode>AQAAAIAQBABAgAAEBAgACQIoAAEIAMgAIQgAIAAAAAA=</HashCode>
       <FileName>dataManager.hpp</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="owner" />
+      <Field Name="dRaport" />
     </ShowAsAssociation>
+  </Class>
+  <Class Name="DailyRaport">
+    <Position X="5.5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIACACAAAAAAAAAQAAAACCAAEA=</HashCode>
+      <FileName>dailyRaport.hpp</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
