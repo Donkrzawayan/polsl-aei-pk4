@@ -5,6 +5,7 @@
 #include <vector>
 #include "item.hpp"
 #include <algorithm> //sort find
+#include "dailyRaport.hpp"
 
 /// Class managing all data saved in binary file
 class DataManager
@@ -14,8 +15,9 @@ private:
 	std::vector<Item> stock;
 	unsigned int invoiceNo; ///< Number of next invoice
 
-	long double totalPayment; ///< Daily raport info
-	long double totalPTUAmount; ///< Daily raport info
+	DailyRaport dRaport;
+	//long double totalPayment; ///< Daily raport info
+	//long double totalPTUAmount; ///< Daily raport info
 private:
 	/// Adding items to base; called from loadFromInvoice
 	DataManager &operator+=(Item &&c);
@@ -81,16 +83,10 @@ public:
 	bool loadFromXMLInvoice(const std::string &docName);
 
 
-
-	//osobna klasa na raport?
-
 	/// Add payments to sum payments
-	void addSum(double sum, double PTUSum) { totalPayment += sum, totalPTUAmount += PTUSum; }
+	void addSum(double sum, double PTUSum) { dRaport.addSum(sum, PTUSum); }
 	/// Generate daily report file
-	bool dailyRaport();
-private:
-	inline void writeDocumentInfoXML(XMLDoc & doc)const;
-	inline void writePaymentXML(XMLDoc & doc)const;
+	bool dailyRaport() { return dRaport.generate(); }
 };
 
 template<typename InputIterator>

@@ -155,6 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dailyRaport.cpp" />
     <ClCompile Include="helpfulness.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="dataManager.cpp" />
@@ -172,6 +173,7 @@
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dailyRaport.hpp" />
     <ClInclude Include="item.hpp" />
     <ClInclude Include="dataManager.hpp" />
     <ClInclude Include="helpfulness.hpp" />

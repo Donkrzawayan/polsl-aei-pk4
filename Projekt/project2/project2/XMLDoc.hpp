@@ -35,6 +35,7 @@ public:
 	/// See addElement(const char *TextNewElement)
 	void insertChild();
 
+	/** @retval false Cant save file. */
 	bool saveXML(const char * docName);
 
 
