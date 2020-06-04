@@ -29,7 +29,7 @@ inline void Interface::mainMenuSwitch(char choice, bool & end) {
 	case '4':
 		return invoiceIssueMenu();
 	case '5':
-		return dailyReport();
+		return dailyRaport();
 	case '6':
 		end = true;
 		return dmngr.sortAndWriteBase(dFileName);
@@ -215,7 +215,7 @@ inline void Interface::checkAndRepairItemQuantity(unsigned int index, unsigned i
 inline void Interface::confirmDocument(Receipt & re)
 {
 	bool result = re.createDocument();
-	dmngr.addSum(re.getSum(), re.getPTUSum());
+	dRaport.addSum(re.getSum(), re.getPTUSum());
 	if (result)
 		dmngr.remove(re.cbegin(), re.cend()); //remove from stock
 	else {

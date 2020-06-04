@@ -3,12 +3,14 @@
 #include <string>
 #include "dataManager.hpp"
 #include "invoice.hpp"
+#include "dailyRaport.hpp"
 
 /// Creates interface for user
 class Interface
 {
 	std::string dFileName;
 	DataManager dmngr;
+	DailyRaport dRaport;
 private:
 	template<typename T>
 	void checkAndRepairCin(T &t)const;
@@ -47,7 +49,7 @@ private:
 	inline void confirmDocument(Receipt &re);
 
 
-	void dailyReport() { dmngr.dailyRaport(); }
+	void dailyRaport() { dRaport.generate(); }
 };
 
 template<typename T>

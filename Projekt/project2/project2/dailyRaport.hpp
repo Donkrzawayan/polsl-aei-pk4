@@ -9,7 +9,11 @@ class DailyRaport
 	long double totalPTUAmount; ///< Total daily PTU payment
 public:
 	DailyRaport() : totalPayment(0.0L), totalPTUAmount(0.0L) {}
+
+	/// Add payments to sum payments
 	void addSum(double sum, double PTUSum) { totalPayment += sum, totalPTUAmount += PTUSum; }
+
+	/// Generate daily report file
 	bool generate();
 private:
 	inline void writeDocumentInfoXML(XMLDoc &doc)const;
