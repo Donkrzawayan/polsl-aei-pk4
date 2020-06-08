@@ -7,8 +7,6 @@ class Invoice :	virtual public Receipt
 {
 	Party contractor;
 	unsigned int invoiceNo; ///< Number of invoice
-protected:
-	void writeDocInfoXML(XMLDoc & doc)const;
 public:
 	/**
 	 @param owner pointer to owner data
@@ -23,6 +21,7 @@ public:
 	virtual bool createDocument()const override;
 protected:
 	void addDocInfoToDocument(XMLDoc & doc)const;
+	void writeDocInfoXML(XMLDoc & doc)const;
 	void addBuyerDataToDocument(XMLDoc & doc)const;
 	void addItemsToDocument(XMLDoc &doc)const;
 	void addSumToDocument(XMLDoc &doc)const;

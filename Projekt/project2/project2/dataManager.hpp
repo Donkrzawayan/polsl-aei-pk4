@@ -19,8 +19,13 @@ private:
 public:
 	/** @param dFileName name of file with user data */
 	DataManager(std::string dbFileName = "db.bin");
+private:
+	/// Read base from bin; called from constructor
+	void readBase(std::ifstream &ifs);
+	inline void readMonthAndInvoiceNo(std::ifstream &ifs);
+	inline void readStock(std::ifstream &ifs);
 
-
+public:
 	//owner operations
 	void createOwner();
 	const Party *pOwner()const { return &owner; } ///< Return pointer to owner data
@@ -62,11 +67,6 @@ public:
 	/// Sort and write base to bin
 	void sortAndWriteBase(std::string dbFileName = "db.bin");
 private:
-	/// Read base from bin; called from constructor
-	void readBase(std::ifstream &ifs);
-	inline void readMonthAndInvoiceNo(std::ifstream &ifs);
-	inline void readStock(std::ifstream &ifs);
-
 	/// Write base elements to bin; called from sortAndWriteBase()
 	inline void writeMonthAndInvoiceNo(std::ofstream &ofs)const;
 	inline void writeStock(std::ofstream &ofs)const;

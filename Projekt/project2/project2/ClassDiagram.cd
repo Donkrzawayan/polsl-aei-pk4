@@ -37,11 +37,12 @@
   <Class Name="Interface">
     <Position X="11.25" Y="0.75" Width="2" />
     <TypeIdentifier>
-      <HashCode>AACAAIARAAIAJgEAAADAIAIAAAAIFAAAAAIAoAADAAA=</HashCode>
+      <HashCode>AACAAIARAAIAJAEAAADAIAIAAAAIFAAAIAIAoAADAAA=</HashCode>
       <FileName>interface.hpp</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="dmngr" />
+      <Field Name="dRaport" />
     </ShowAsAssociation>
   </Class>
   <Class Name="XMLDoc">
@@ -62,18 +63,17 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DataManager">
-    <Position X="8.25" Y="0.75" Width="2" />
+    <Position X="8.25" Y="3.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AQAAAIAQBABAgAAEBAgACQIoAAEIAMgAIQgAIAAAAAA=</HashCode>
+      <HashCode>AQAAAIAQBABAgAAEBAgAAQIoAAEAAMgAAQgAIAAAAAA=</HashCode>
       <FileName>dataManager.hpp</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="owner" />
-      <Field Name="dRaport" />
     </ShowAsAssociation>
   </Class>
   <Class Name="DailyRaport">
-    <Position X="5.5" Y="0.75" Width="1.75" />
+    <Position X="8.25" Y="0.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAIACACAAAAAAAAAQAAAACCAAEA=</HashCode>
       <FileName>dailyRaport.hpp</FileName>

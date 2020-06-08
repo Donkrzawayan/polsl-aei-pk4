@@ -11,28 +11,20 @@ class Interface
 	std::string dFileName;
 	DataManager dmngr;
 	DailyRaport dRaport;
-private:
-	template<typename T>
-	void checkAndRepairCin(T &t)const;
 
-	template <typename T>
-	T getNumberFromCin(const char *statement)const;
 
-	inline char getCharFromCin()const;
 public:
 	/** @param dFileName name of file with user data */
 	Interface(std::string dFileName) : dFileName(dFileName), dmngr(dFileName) {}
 	void mainMenu(); ///< main loop
 private:
+	inline char getCharFromCin()const;
 	inline void mainMenuSwitch(char choice, bool &end);
-
 
 	inline void changeOwnerData();
 
-
 	inline void addFromInvoice(); ///< Add items from invoice to dataManager
 	inline void addItemsFromInvoice();
-
 
 	void receiptIssueMenu(); ///< Receipt menu
 	void invoiceIssueMenu(); ///< Invoice menu
@@ -48,6 +40,11 @@ private:
 	inline void checkAndRepairItemQuantity(unsigned int index, unsigned int quantity)const;
 	inline void confirmDocument(Receipt &re);
 
+	template <typename T>
+	T getNumberFromCin(const char *statement)const;
+
+	template<typename T>
+	void checkAndRepairCin(T &t)const;
 
 	void dailyRaport() { dRaport.generate(); }
 };
