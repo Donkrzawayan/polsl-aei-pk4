@@ -38,7 +38,7 @@ public:
 	//reading, showing, writing
 
 	/** @param descriptionWidth,quantityWidth,spriceWidth,vatWidth Set width of specified column */
-	void Show(const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth)const;
+	void show(const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth)const;
 	std::istream &read(std::istream & is);
 	std::ostream &write(std::ostream & os)const;
 	void writeXML(XMLDoc &doc)const;

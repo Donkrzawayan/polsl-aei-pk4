@@ -113,7 +113,7 @@ bool DataManager::loadFromXMLInvoice(const std::string & docName) {
 	return true;
 }
 
-void DataManager::ShowStock() const
+void DataManager::showStock() const
 {
 	constexpr std::streamsize NO_WIDTH = 5;
 	constexpr std::streamsize DESCRIPTION_WIDTH = 56;
@@ -123,15 +123,15 @@ void DataManager::ShowStock() const
 
 	auto width = std::cout.width(); //remember old value
 
-	ShowStockHeader(NO_WIDTH, DESCRIPTION_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
+	showStockHeader(NO_WIDTH, DESCRIPTION_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
 
-	ShowStockContent(NO_WIDTH, DESCRIPTION_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
+	showStockContent(NO_WIDTH, DESCRIPTION_WIDTH, QTY_WIDTH, PRICE_WIDTH, VAT_WIDTH);
 
 	std::cout.unsetf(std::ios_base::adjustfield); //set default
 	std::cout.width(width);
 }
 
-void DataManager::ShowStockHeader(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
+void DataManager::showStockHeader(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
 {
 	std::cout << std::right << std::setw(noWidth) << "lp. ";
 	std::cout << std::left << std::setw(descriptionWidth) << "Nazwa";
@@ -141,11 +141,11 @@ void DataManager::ShowStockHeader(const std::streamsize noWidth, const std::stre
 	std::cout << "\n";
 }
 
-void DataManager::ShowStockContent(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
+void DataManager::showStockContent(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
 {
 	for (size_t i = 0; i < stock.size(); ++i) {
 		std::cout << std::right << std::setw(noWidth - 2) << (i + 1) << ". "; //index for user
-		stock[i].Show(descriptionWidth, quantityWidth, spriceWidth, vatWidth);
+		stock[i].show(descriptionWidth, quantityWidth, spriceWidth, vatWidth);
 		std::cout << "\n";
 	}
 }

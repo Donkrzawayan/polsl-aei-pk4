@@ -173,7 +173,7 @@ inline void Interface::addItem(Receipt & re)
 
 inline void Interface::addItemFromUser(Receipt & re)
 {
-	ShowStock();
+	showStock();
 
 	unsigned int index = getNumberFromCin<unsigned int>("Indeks pozycji do dodania [0 aby anulowac dodawanie]: ");
 
@@ -197,11 +197,11 @@ inline char Interface::getCharFromCin() const
 	return character;
 }
 
-inline void Interface::ShowStock() const
+inline void Interface::showStock() const
 {
 	ClearScreen();
 	std::cout << "Stan:\n";
-	dmngr.ShowStock();
+	dmngr.showStock();
 }
 
 inline void Interface::checkAndRepairItemQuantity(unsigned int index, unsigned int quantity) const

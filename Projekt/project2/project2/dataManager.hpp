@@ -58,10 +58,10 @@ public:
 	//showing, wrighting, reading
 
 	/// Show stock to console
-	void ShowStock()const;
-	void ShowStockHeader(const std::streamsize noWidth, const std::streamsize descriptionWidth,	const std::streamsize quantityWidth,
+	void showStock()const;
+	void showStockHeader(const std::streamsize noWidth, const std::streamsize descriptionWidth,	const std::streamsize quantityWidth,
 		const std::streamsize spriceWidth, const std::streamsize vatWidth)const;
-	void ShowStockContent(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth,
+	void showStockContent(const std::streamsize noWidth, const std::streamsize descriptionWidth, const std::streamsize quantityWidth,
 		const std::streamsize spriceWidth, const std::streamsize vatWidth)const;
 
 	/// Sort and write base to bin

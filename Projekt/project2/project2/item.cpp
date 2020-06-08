@@ -2,7 +2,7 @@
 #include <iomanip> //std::setw
 #include <utility> //move
 
-void Item::Show(const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
+void Item::show(const std::streamsize descriptionWidth, const std::streamsize quantityWidth, const std::streamsize spriceWidth, const std::streamsize vatWidth) const
 {
 	
 	//setting floating point values

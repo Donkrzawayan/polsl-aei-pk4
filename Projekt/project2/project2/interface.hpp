@@ -36,7 +36,7 @@ private:
 	inline void addItem(Receipt &re); ///< Add chosen by user item from dataManager to receipt/invoice
 	inline void addItemFromUser(Receipt &re);
 	
-	inline void ShowStock()const;
+	inline void showStock()const;
 	inline void checkAndRepairItemQuantity(unsigned int index, unsigned int quantity)const;
 	inline void confirmDocument(Receipt &re);
 
